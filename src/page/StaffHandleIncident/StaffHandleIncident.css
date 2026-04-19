@@ -1,0 +1,467 @@
+.staff-incident-page {
+    padding: 2rem;
+    color: #0b1c30;
+}
+
+.staff-incident-page__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.staff-incident-page__eyebrow {
+    margin: 0 0 0.5rem;
+    color: #0053ce;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.staff-incident-page__header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.staff-incident-page__header p {
+    margin: 0.5rem 0 0;
+    color: #424654;
+}
+
+.staff-incident-page__filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.staff-incident-page__search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff;
+    border-radius: 1rem;
+    padding: 0.9rem 1rem;
+    box-shadow: 0 8px 30px -12px rgba(11, 28, 48, 0.1);
+    min-width: 320px;
+}
+
+.staff-incident-page__search input {
+    border: 0;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+}
+
+.staff-incident-page__status-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.staff-incident-page__status-filter {
+    border: 0;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    color: #424654;
+    font-weight: 700;
+    box-shadow: 0 8px 30px -12px rgba(11, 28, 48, 0.1);
+    cursor: pointer;
+}
+
+.staff-incident-page__status-filter--active {
+    background: #0053ce;
+    color: #fff;
+}
+
+.staff-incident-page__summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.staff-incident-page__summary-card,
+.staff-incident-page__table-card,
+.staff-incident-page__modal {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 40px rgba(11, 28, 48, 0.08);
+}
+
+.staff-incident-page__summary-card {
+    padding: 1.25rem;
+}
+
+.staff-incident-page__summary-card span {
+    display: block;
+    color: #737686;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.staff-incident-page__summary-card strong {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 2rem;
+}
+
+.staff-incident-page__table-card {
+    overflow: hidden;
+}
+
+.staff-incident-page__table-wrap {
+    overflow-x: auto;
+}
+
+.staff-incident-page__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.staff-incident-page__table thead th {
+    text-align: left;
+    padding: 1rem 1.25rem;
+    background: #f5f8ff;
+    color: #737686;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.staff-incident-page__table tbody td {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #eef2fb;
+    vertical-align: middle;
+}
+
+.staff-incident-page__type-block strong,
+.staff-incident-page__type-block span {
+    display: block;
+}
+
+.staff-incident-page__type-block span {
+    margin-top: 0.25rem;
+    color: #737686;
+    font-size: 0.8rem;
+}
+
+.staff-incident-page__status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.staff-incident-page__status--pending {
+    background: rgba(254, 166, 25, 0.18);
+    color: #684000;
+}
+
+.staff-incident-page__status--resolved {
+    background: rgba(0, 83, 206, 0.1);
+    color: #0053ce;
+}
+
+.staff-incident-page__status--rejected {
+    background: rgba(186, 26, 26, 0.1);
+    color: #ba1a1a;
+}
+
+.staff-incident-page__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.staff-incident-page__icon-btn,
+.staff-incident-page__close,
+.staff-incident-page__resolve-btn,
+.staff-incident-page__reject-btn,
+.staff-incident-page__confirm-submit,
+.staff-incident-page__confirm-cancel {
+    border: 0;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.staff-incident-page__icon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.9rem;
+    background: #eff4ff;
+    color: #0053ce;
+}
+
+.staff-incident-page__state,
+.staff-incident-page__empty-row {
+    padding: 1.5rem;
+    text-align: center;
+    color: #424654;
+}
+
+.staff-incident-page__state--error {
+    color: #ba1a1a;
+}
+
+.staff-incident-page__modal-backdrop,
+.staff-incident-page__confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 28, 48, 0.45);
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    z-index: 100;
+}
+
+.staff-incident-page__confirm-backdrop {
+    z-index: 110;
+}
+
+.staff-incident-page__modal {
+    width: min(920px, 100%);
+    padding: 1.5rem;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.staff-incident-page__modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.staff-incident-page__modal-head p,
+.staff-incident-page__detail-item span,
+.staff-incident-page__detail-meta span,
+.staff-incident-page__detail-description span {
+    color: #737686;
+}
+
+.staff-incident-page__modal-head h3 {
+    margin: 0.25rem 0 0;
+    font-size: 1.5rem;
+}
+
+.staff-incident-page__close {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: #eff4ff;
+    color: #0b1c30;
+    display: grid;
+    place-items: center;
+}
+
+.staff-incident-page__detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.staff-incident-page__detail-item {
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f8faff;
+}
+
+.staff-incident-page__detail-item span,
+.staff-incident-page__detail-item strong {
+    display: block;
+}
+
+.staff-incident-page__detail-item strong {
+    margin-top: 0.4rem;
+    color: #0b1c30;
+}
+
+.staff-incident-page__detail-description {
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f8faff;
+    margin-bottom: 1.25rem;
+}
+
+.staff-incident-page__detail-description p {
+    margin: 0.5rem 0 0;
+}
+
+.staff-incident-page__media-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.staff-incident-page__media-grid span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #0b1c30;
+}
+
+.staff-incident-page__media-grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 1rem;
+    border: 1px solid #e5eeff;
+}
+
+.staff-incident-page__image-empty {
+    height: 220px;
+    border-radius: 1rem;
+    border: 1px dashed #c3c6d7;
+    display: grid;
+    place-items: center;
+    color: #737686;
+    background: #fbfcff;
+}
+
+.staff-incident-page__detail-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.staff-incident-page__detail-meta > div {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    background: #eff4ff;
+}
+
+.staff-incident-page__note-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f8faff;
+}
+
+.staff-incident-page__note-box label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.staff-incident-page__note-box textarea {
+    width: 100%;
+    border: 1px solid #dce9ff;
+    border-radius: 1rem;
+    padding: 0.9rem 1rem;
+    outline: none;
+    resize: vertical;
+    font: inherit;
+}
+
+.staff-incident-page__modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.staff-incident-page__resolve-btn,
+.staff-incident-page__reject-btn,
+.staff-incident-page__confirm-submit,
+.staff-incident-page__confirm-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.95rem 1.15rem;
+    border-radius: 1rem;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.staff-incident-page__resolve-btn {
+    background: linear-gradient(135deg, #0053ce, #306deb);
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(0, 83, 206, 0.24);
+}
+
+.staff-incident-page__reject-btn {
+    background: linear-gradient(135deg, #ffe8e8, #ffd2d2);
+    color: #ba1a1a;
+    border: 1px solid rgba(186, 26, 26, 0.12);
+    box-shadow: 0 10px 24px rgba(186, 26, 26, 0.08);
+}
+
+.staff-incident-page__resolve-btn:hover,
+.staff-incident-page__reject-btn:hover,
+.staff-incident-page__confirm-submit:hover,
+.staff-incident-page__confirm-cancel:hover,
+.staff-incident-page__icon-btn:hover {
+    transform: translateY(-1px);
+}
+
+.staff-incident-page__confirm-modal {
+    width: min(420px, 100%);
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 24px 60px rgba(11, 28, 48, 0.2);
+}
+
+.staff-incident-page__confirm-modal h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.staff-incident-page__confirm-modal p {
+    margin: 0 0 1.25rem;
+    color: #424654;
+}
+
+.staff-incident-page__confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.staff-incident-page__confirm-cancel {
+    background: #f1f4fb;
+    color: #0b1c30;
+}
+
+.staff-incident-page__confirm-submit {
+    background: linear-gradient(135deg, #0053ce, #306deb);
+    color: #fff;
+}
+
+@media (max-width: 900px) {
+    .staff-incident-page__header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .staff-incident-page__filters,
+    .staff-incident-page__summary-grid,
+    .staff-incident-page__detail-grid,
+    .staff-incident-page__media-grid {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .staff-incident-page__search {
+        width: 100%;
+        min-width: 0;
+    }
+}

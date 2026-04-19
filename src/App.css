@@ -1,0 +1,18 @@
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}

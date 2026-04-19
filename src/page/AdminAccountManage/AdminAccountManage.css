@@ -1,0 +1,448 @@
+.admin-account {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.admin-account__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-account__header h2 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.admin-account__header p {
+  margin: 8px 0 0;
+  color: #424654;
+  font-size: 0.95rem;
+}
+
+.admin-account__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 2fr;
+  gap: 22px;
+}
+
+.admin-account__panel {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(11, 28, 48, 0.06);
+}
+
+.admin-account__panel-head,
+.admin-account__staff-item,
+.admin-account__role-head,
+.admin-account__footer,
+.admin-account__table-head,
+.admin-account__user-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-account__panel-head h3,
+.admin-account__table-head h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.admin-account__panel-head p {
+  margin: 6px 0 0;
+  color: #737686;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-account__icon-btn {
+  border: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: #eff4ff;
+  color: #0053ce;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.admin-account__role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.admin-account__role-head {
+  margin-bottom: 8px;
+  color: #424654;
+  font-size: 0.92rem;
+}
+
+.admin-account__progress {
+  width: 100%;
+  height: 10px;
+  background: #dce9ff;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.admin-account__progress-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.admin-account__progress-fill--primary { background: #0053ce; }
+.admin-account__progress-fill--secondary { background: #fea619; }
+.admin-account__progress-fill--tertiary { background: #6b38d4; }
+
+.admin-account__staff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.admin-account__staff-item {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+}
+
+.admin-account__staff-item p {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.admin-account__staff-item span {
+  color: #737686;
+  font-size: 0.85rem;
+}
+
+.admin-account__badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-account__badge--admin {
+  background: rgba(107, 56, 212, 0.08);
+  color: #6b38d4;
+}
+
+.admin-account__badge--staff {
+  background: rgba(254, 166, 25, 0.1);
+  color: #855300;
+}
+
+.admin-account__panel--table {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-account__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #eff4ff;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  padding: 0 14px;
+  border-radius: 14px;
+  width: min(100%, 360px);
+}
+
+.admin-account__search input {
+  border: 0;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  height: 46px;
+}
+
+.admin-account__table-wrap {
+  overflow-x: auto;
+}
+
+.admin-account__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  min-width: 800px;
+}
+
+.admin-account__table thead th {
+  font-size: 0.8rem;
+  color: #737686;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding-bottom: 10px;
+}
+
+.admin-account__table tbody tr {
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(195, 198, 215, 0.18);
+}
+
+.admin-account__table tbody tr:hover {
+  background: #eff4ff;
+}
+
+.admin-account__table tbody td {
+  padding: 16px 14px;
+  font-size: 0.95rem;
+}
+
+.admin-account__user-cell {
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.admin-account__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #0053ce;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+.admin-account__user-cell strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.admin-account__user-cell span {
+  color: #737686;
+  font-size: 0.82rem;
+}
+
+.admin-account__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-account__status--active {
+  background: rgba(18, 183, 106, 0.1);
+  color: #12b76a;
+}
+
+.admin-account__status--locked {
+  background: rgba(186, 26, 26, 0.08);
+  color: #ba1a1a;
+}
+
+.admin-account__text-right {
+  text-align: right;
+}
+
+.admin-account__row-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+.admin-account__action-btn {
+  border: 0;
+  background: linear-gradient(135deg, #0053ce, #306deb);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.admin-account__action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-account__loading,
+.admin-account__error {
+  padding: 16px 0;
+  color: #424654;
+}
+
+.admin-account__error {
+  color: #ba1a1a;
+}
+
+.admin-account__footer {
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.admin-account__pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-account__pagination button {
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.admin-account__pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-account__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 28, 48, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 20px;
+}
+
+.admin-account__modal {
+  width: min(100%, 460px);
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 24px 80px rgba(11, 28, 48, 0.18);
+  text-align: center;
+}
+
+.admin-account__modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: rgba(0, 83, 206, 0.1);
+  color: #0053ce;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  font-size: 1.3rem;
+}
+
+.admin-account__modal h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.admin-account__modal p {
+  margin: 12px 0 0;
+  color: #424654;
+  line-height: 1.6;
+}
+
+.admin-account__modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.admin-account__modal-btn {
+  border: 0;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  min-width: 120px;
+}
+
+.admin-account__modal-btn--ghost {
+  background: #eff4ff;
+  color: #0040a2;
+}
+
+.admin-account__modal-btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, #0053ce, #306deb);
+}
+
+.admin-account__toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 70;
+  min-width: 280px;
+  max-width: 360px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  color: #fff;
+  box-shadow: 0 16px 48px rgba(11, 28, 48, 0.18);
+  animation: adminAccountToastIn 0.25s ease;
+}
+
+.admin-account__toast--success {
+  background: linear-gradient(135deg, #12b76a, #0a8f52);
+}
+
+.admin-account__toast--error {
+  background: linear-gradient(135deg, #ba1a1a, #8f1515);
+}
+
+@keyframes adminAccountToastIn {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1280px) {
+  .admin-account__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-account__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-account__table-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .admin-account__search {
+    width: 100%;
+  }
+
+  .admin-account__modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-account__modal-btn {
+    width: 100%;
+  }
+}
