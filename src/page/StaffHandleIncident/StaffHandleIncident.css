@@ -300,6 +300,76 @@
     margin: 0.5rem 0 0;
 }
 
+.staff-incident-page__person-panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.staff-incident-page__person-panel {
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f8faff;
+    border: 1px solid #e7efff;
+}
+
+.staff-incident-page__person-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+    font-weight: 800;
+    color: #0b1c30;
+}
+
+.staff-incident-page__person-panel-head svg {
+    color: #0053ce;
+}
+
+.staff-incident-page__person-card,
+.staff-incident-page__passenger-card {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.95rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid #e5eeff;
+    box-shadow: 0 8px 24px rgba(11, 28, 48, 0.05);
+}
+
+.staff-incident-page__person-card strong,
+.staff-incident-page__passenger-card strong {
+    color: #0b1c30;
+    font-size: 1rem;
+}
+
+.staff-incident-page__person-card span,
+.staff-incident-page__passenger-card span {
+    color: #424654;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.staff-incident-page__passenger-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.staff-incident-page__passenger-card {
+    position: relative;
+}
+
+.staff-incident-page__passenger-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    border-radius: 1rem 0 0 1rem;
+    background: linear-gradient(180deg, #0053ce, #7ca7ff);
+}
+
 .staff-incident-page__media-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -452,12 +522,17 @@
         align-items: flex-start;
     }
 
-    .staff-incident-page__filters,
     .staff-incident-page__summary-grid,
     .staff-incident-page__detail-grid,
-    .staff-incident-page__media-grid {
+    .staff-incident-page__media-grid,
+    .staff-incident-page__person-panels {
         width: 100%;
         grid-template-columns: 1fr;
+    }
+
+    .staff-incident-page__filters {
+        width: 100%;
+        justify-content: flex-start;
     }
 
     .staff-incident-page__search {

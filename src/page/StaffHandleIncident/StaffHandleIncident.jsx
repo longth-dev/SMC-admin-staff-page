@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiX } from 'react-icons/fi';
+import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiUser, FiUsers, FiX } from 'react-icons/fi';
 import AxiosSetup from '../../services/AxiosSetup';
 import './StaffHandleIncident.css';
 
@@ -286,6 +286,10 @@ const StaffHandleIncident = () => {
                                         <strong>{incidentDetail.tripId || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
+                                        <span>Trip Status</span>
+                                        <strong>{incidentDetail.tripStatus || '-'}</strong>
+                                    </div>
+                                    <div className="staff-incident-page__detail-item">
                                         <span>Reported By</span>
                                         <strong>{incidentDetail.reportedByStudentName || '-'}</strong>
                                     </div>
@@ -297,11 +301,57 @@ const StaffHandleIncident = () => {
                                         <span>Resolved At</span>
                                         <strong>{formatDateTime(incidentDetail.resolvedAt)}</strong>
                                     </div>
+                                    <div className="staff-incident-page__detail-item">
+                                        <span>Resolved By</span>
+                                        <strong>{incidentDetail.resolvedBySystemUserId || '-'}</strong>
+                                    </div>
                                 </div>
 
                                 <div className="staff-incident-page__detail-description">
                                     <span>Description</span>
                                     <p>{incidentDetail.description || 'No description provided.'}</p>
+                                </div>
+
+                                <div className="staff-incident-page__person-panels">
+                                    <div className="staff-incident-page__person-panel">
+                                        <div className="staff-incident-page__person-panel-head">
+                                            <FiUser />
+                                            <span>Driver</span>
+                                        </div>
+                                        {incidentDetail.driver ? (
+                                            <div className="staff-incident-page__person-card">
+                                                <strong>{incidentDetail.driver.fullName || '-'}</strong>
+                                                <span>Profile ID: {incidentDetail.driver.driverProfileId || '-'}</span>
+                                                <span>Student ID: {incidentDetail.driver.studentId || '-'}</span>
+                                                <span>Email: {incidentDetail.driver.email || '-'}</span>
+                                                <span>Phone: {incidentDetail.driver.phoneNumber || '-'}</span>
+                                            </div>
+                                        ) : (
+                                            <div className="staff-incident-page__image-empty">No driver info</div>
+                                        )}
+                                    </div>
+
+                                    <div className="staff-incident-page__person-panel">
+                                        <div className="staff-incident-page__person-panel-head">
+                                            <FiUsers />
+                                            <span>Passengers</span>
+                                        </div>
+                                        {Array.isArray(incidentDetail.passengers) && incidentDetail.passengers.length > 0 ? (
+                                            <div className="staff-incident-page__passenger-list">
+                                                {incidentDetail.passengers.map((passenger) => (
+                                                    <div key={passenger.bookingId} className="staff-incident-page__passenger-card">
+                                                        <strong>{passenger.fullName || '-'}</strong>
+                                                        <span>Booking ID: {passenger.bookingId || '-'}</span>
+                                                        <span>Student ID: {passenger.studentId || '-'}</span>
+                                                        <span>Status: {passenger.bookingStatus || '-'}</span>
+                                                        <span>Final Price: {passenger.finalPricePoint ?? '-'}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="staff-incident-page__image-empty">No passengers</div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="staff-incident-page__media-grid">
@@ -330,10 +380,6 @@ const StaffHandleIncident = () => {
                                 <div className="staff-incident-page__detail-meta">
                                     <div>
                                         <FiClock />
-                                        <span>Resolved By: {incidentDetail.resolvedBySystemUserId || '-'}</span>
-                                    </div>
-                                    <div>
-                                        <FiCheckCircle />
                                         <span>Resolution Note: {incidentDetail.resolutionNote || '-'}</span>
                                     </div>
                                 </div>
