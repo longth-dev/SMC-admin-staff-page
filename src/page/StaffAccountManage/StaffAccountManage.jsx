@@ -62,11 +62,9 @@ const StaffAccountManage = () => {
     }, [fetchAccounts]);
 
     const roleStats = useMemo(() => {
-        const adminCount = accounts.filter((item) => String(item.role).toLowerCase() === 'admin').length;
         const driverCount = accounts.filter((item) => String(item.role).toLowerCase() === 'driver').length;
         const studentCount = accounts.filter((item) => String(item.role).toLowerCase() === 'student').length;
         return [
-            { label: 'Admin', count: adminCount, ratio: accounts.length ? Math.round((adminCount / accounts.length) * 100) : 0, colorClass: 'primary' },
             { label: 'Driver', count: driverCount, ratio: accounts.length ? Math.round((driverCount / accounts.length) * 100) : 0, colorClass: 'secondary' },
             { label: 'Student', count: studentCount, ratio: accounts.length ? Math.round((studentCount / accounts.length) * 100) : 0, colorClass: 'tertiary' },
         ];
