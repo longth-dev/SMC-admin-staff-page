@@ -4,6 +4,9 @@ import {
     Area,
     AreaChart,
     CartesianGrid,
+    Cell,
+    Pie,
+    PieChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
@@ -25,6 +28,7 @@ const AdminStatistic = () => {
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [chartType, setChartType] = useState('area');
 
     useEffect(() => {
         const fetchSummary = async () => {
@@ -57,6 +61,9 @@ const AdminStatistic = () => {
         return chartData.reduce((best, current) => (current.revenue > (best?.revenue ?? -1) ? current : best), null);
     }, [chartData]);
 
+    const pieChartData = useMemo(() => chartData.filter((item) => item.revenue > 0), [chartData]);
+
+    const pieColors = ['#0053ce', '#306deb', '#4b82f0', '#6c9cf3', '#8cb3f7', '#aac9fb', '#c7dafa', '#dce7fd', '#edf2ff', '#b5c8ff', '#87a8f9', '#5f89ef'];
 
     const kpis = [
         {
@@ -146,13 +153,20 @@ const AdminStatistic = () => {
                             <h3>Biểu đồ doanh thu</h3>
                             <p>Doanh thu theo tháng trong năm {summary?.year ?? ''}</p>
                         </div>
+                        <button
+                            type="button"
+                            className="admin-stat__chart-toggle"
+                            onClick={() => setChartType((current) => (current === 'area' ? 'pie' : 'area'))}
+                        >
+                            {chartType === 'area' ? 'Đổi sang biểu đồ tròn' : 'Đổi sang biểu đồ cột'}
+                        </button>
                     </div>
 
                     <div className="admin-stat-chart">
                         <div className="admin-stat-chart__canvas">
                             {loading ? (
                                 <div className="admin-stat__loading">Đang tải dữ liệu...</div>
-                            ) : (
+                            ) : chartType === 'area' ? (
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={chartData} margin={{ top: 20, right: 16, left: 0, bottom: 0 }}>
                                         <defs>
@@ -177,6 +191,26 @@ const AdminStatistic = () => {
                                             activeDot={{ r: 5 }}
                                         />
                                     </AreaChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Tooltip formatter={(value, name, props) => [`${formatMoney(value)} ₫`, `Tháng ${props?.payload?.month ?? ''}`]} />
+                                        <Pie
+                                            data={pieChartData}
+                                            dataKey="revenue"
+                                            nameKey="month"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={120}
+                                            innerRadius={68}
+                                            paddingAngle={2}
+                                        >
+                                            {pieChartData.map((entry, index) => (
+                                                <Cell key={`cell-${entry.month}`} fill={pieColors[index % pieColors.length]} />
+                                            ))}
+                                        </Pie>
+                                    </PieChart>
                                 </ResponsiveContainer>
                             )}
                         </div>

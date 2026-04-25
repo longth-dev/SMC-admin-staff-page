@@ -220,6 +220,23 @@
   color: #0b1c30;
 }
 
+.admin-stat__chart-toggle {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #eff4ff;
+  color: #0053ce;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.admin-stat__chart-toggle:hover {
+  transform: translateY(-1px);
+  background: #e4edff;
+  box-shadow: 0 10px 24px rgba(11, 28, 48, 0.08);
+}
+
 .admin-stat-panel__head p {
   color: #5f6575;
   margin-top: 6px;

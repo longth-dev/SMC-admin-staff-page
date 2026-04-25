@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiUser, FiUsers, FiX } from 'react-icons/fi';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AxiosSetup from '../../services/AxiosSetup';
 import './StaffHandleIncident.css';
 
@@ -104,7 +106,7 @@ const StaffHandleIncident = () => {
     };
 
     const handleResolve = async (status) => {
-        if (!selectedIncidentId) return;
+        if (!selectedIncidentId) return false;
 
         try {
             setActionLoading(true);
@@ -115,9 +117,13 @@ const StaffHandleIncident = () => {
 
             await fetchIncidents();
             setIncidentDetail((prev) => (prev ? { ...prev, status, resolutionNote } : prev));
+            toast.success(status === 'Resolved' ? 'Đã xử lý sự cố thành công.' : 'Đã từ chối sự cố thành công.');
+            return true;
         } catch (e) {
             console.error(e);
             setModalError(status === 'Resolved' ? 'Không thể xử lý sự cố.' : 'Không thể từ chối sự cố.');
+            toast.error(status === 'Resolved' ? 'Xử lý sự cố thất bại.' : 'Từ chối sự cố thất bại.');
+            return false;
         } finally {
             setActionLoading(false);
             setConfirmAction('');
@@ -135,15 +141,9 @@ const StaffHandleIncident = () => {
     };
 
     const confirmActionSubmit = async () => {
-        if (confirmAction === 'resolve') {
-            await handleResolve('Resolved');
-            return;
-        }
-
-        if (confirmAction === 'reject') {
-            await handleResolve('Rejected');
-            return;
-        }
+        const status = confirmAction === 'resolve' ? 'Resolved' : 'Rejected';
+        const success = await handleResolve(status);
+        if (success) closeDetail();
     };
 
     return (
@@ -368,9 +368,10 @@ const StaffHandleIncident = () => {
                                     <div>
                                         <span>Video Evidence</span>
                                         {incidentDetail.videoEvidenceUrl ? (
-                                            <a href={incidentDetail.videoEvidenceUrl} target="_blank" rel="noreferrer">
-                                                <img src={incidentDetail.videoEvidenceUrl} alt="Incident video evidence" />
-                                            </a>
+                                            <video className="staff-incident-page__video" controls preload="metadata">
+                                                <source src={incidentDetail.videoEvidenceUrl} />
+                                                Trình duyệt của bạn không hỗ trợ video.
+                                            </video>
                                         ) : (
                                             <div className="staff-incident-page__image-empty">No video</div>
                                         )}
@@ -431,6 +432,8 @@ const StaffHandleIncident = () => {
                     </div>
                 </div>
             ) : null}
+
+            <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop closeOnClick pauseOnHover theme="colored" />
         </div>
     );
 };

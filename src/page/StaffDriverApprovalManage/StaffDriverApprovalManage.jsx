@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiTruck, FiX } from 'react-icons/fi';
+import { toast, ToastContainer } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import AxiosSetup from '../../services/AxiosSetup';
+import 'react-toastify/dist/ReactToastify.css';
 import './StaffDriverApprovalManage.css';
 
 const ROLE_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
@@ -59,6 +61,18 @@ const StaffDriverApprovalManage = () => {
             console.error('Cannot decode token', e);
             return 0;
         }
+    }, []);
+
+    const showToast = useCallback((message, type = 'success') => {
+        toast[type](message, {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'colored',
+        });
     }, []);
 
     const fetchDrivers = useCallback(async () => {
@@ -154,7 +168,7 @@ const StaffDriverApprovalManage = () => {
     };
 
     const handleApproval = async (isApproved, rejectionReason = '') => {
-        if (!selectedDriver) return;
+        if (!selectedDriver) return false;
 
         try {
             setActionLoading(true);
@@ -167,23 +181,32 @@ const StaffDriverApprovalManage = () => {
             await fetchDrivers();
             const response = await AxiosSetup.get(`/DriverProfile/${selectedDriver}`);
             setDriverDetail(response.data || null);
+            showToast(isApproved ? 'Duyệt driver thành công.' : 'Từ chối driver thành công.');
+            return true;
         } catch (e) {
             console.error(e);
             setModalError(isApproved ? 'Không thể duyệt driver.' : 'Không thể từ chối driver.');
+            return false;
         } finally {
             setActionLoading(false);
         }
     };
 
-    const handleApprove = async () => handleApproval(true, '');
+    const handleApprove = async () => {
+        const success = await handleApproval(true, '');
+        if (success) closeDetail();
+    };
     const handleReject = () => {
         setModalError('');
         setConfirmRejectOpen(true);
     };
     const confirmReject = async () => {
         setConfirmRejectOpen(false);
-        await handleApproval(false, rejectReason);
-        setRejectReason('');
+        const success = await handleApproval(false, rejectReason);
+        if (success) {
+            setRejectReason('');
+            closeDetail();
+        }
     };
 
     const handleVehicleApproval = async (vehicleId, isApproved, rejectReason = '') => {
@@ -199,23 +222,33 @@ const StaffDriverApprovalManage = () => {
                 const response = await AxiosSetup.get(`/Vehicle/getByDriverId/${selectedVehicle}`);
                 setVehicleItems(Array.isArray(response.data) ? response.data : []);
             }
+
+            showToast(isApproved ? 'Duyệt vehicle thành công.' : 'Từ chối vehicle thành công.');
+            return true;
         } catch (e) {
             console.error(e);
             setModalError(isApproved ? 'Không thể duyệt vehicle.' : 'Không thể từ chối vehicle.');
+            return false;
         } finally {
             setVehicleActionLoading(false);
         }
     };
 
-    const handleVehicleApprove = async (vehicleId) => handleVehicleApproval(vehicleId, true, '');
+    const handleVehicleApprove = async (vehicleId) => {
+        const success = await handleVehicleApproval(vehicleId, true, '');
+        if (success) closeVehicle();
+    };
     const handleVehicleReject = () => {
         setModalError('');
         setVehicleRejectOpen(true);
     };
     const confirmVehicleReject = async (vehicleId) => {
         setVehicleRejectOpen(false);
-        await handleVehicleApproval(vehicleId, false, vehicleRejectReason);
-        setVehicleRejectReason('');
+        const success = await handleVehicleApproval(vehicleId, false, vehicleRejectReason);
+        if (success) {
+            setVehicleRejectReason('');
+            closeVehicle();
+        }
     };
 
     return (
@@ -532,6 +565,8 @@ const StaffDriverApprovalManage = () => {
                     </div>
                 </div>
             ) : null}
+
+            <ToastContainer />
         </div>
     );
 };

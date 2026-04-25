@@ -72,9 +72,6 @@ const Login = () => {
                         <label className="login-form__label" htmlFor="password">
                             Password
                         </label>
-                        <button type="button" className="login-form__link">
-                            Forget Password?
-                        </button>
                     </div>
 
                     <div className="login-form__password-wrap">

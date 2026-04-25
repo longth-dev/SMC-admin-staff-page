@@ -187,15 +187,6 @@ const AdminAccountManage = () => {
                                 <div className="admin-account__progress-fill admin-account__progress-fill--secondary" style={{ width: '85%' }} />
                             </div>
                         </div>
-                        <div>
-                            <div className="admin-account__role-head">
-                                <span>Staff Admins</span>
-                                <span>0</span>
-                            </div>
-                            <div className="admin-account__progress">
-                                <div className="admin-account__progress-fill admin-account__progress-fill--tertiary" style={{ width: '15%' }} />
-                            </div>
-                        </div>
                     </div>
                 </article>
 

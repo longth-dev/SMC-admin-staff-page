@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiX } from 'react-icons/fi';
+import { toast, ToastContainer } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import AxiosSetup from '../../services/AxiosSetup';
+import 'react-toastify/dist/ReactToastify.css';
 import './StaffHandleWithdraw.css';
 
 const NAME_ID_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
@@ -46,6 +48,8 @@ const StaffHandleWithdraw = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [modalError, setModalError] = useState('');
     const [confirmRejectOpen, setConfirmRejectOpen] = useState(false);
+    const [transferProofImage, setTransferProofImage] = useState(null);
+    const [transferProofPreview, setTransferProofPreview] = useState('');
 
     const systemUserId = useMemo(() => {
         try {
@@ -117,18 +121,23 @@ const StaffHandleWithdraw = () => {
         setDetail(null);
         setModalError('');
         setConfirmRejectOpen(false);
+        setTransferProofImage(null);
+        setTransferProofPreview('');
     };
 
     const handleApproval = async (isApproved) => {
-        if (!selectedWithdrawId || !detail) return;
+        if (!selectedWithdrawId || !detail) return false;
 
         try {
             setActionLoading(true);
             const formData = new FormData();
             formData.append('WalletId', String(detail.walletId ?? 0));
-            formData.append('Point', '0');
+            formData.append('Point', String(detail.amount ?? 0));
             formData.append('SystemUserId', String(systemUserId));
             formData.append('Approval', String(Boolean(isApproved)));
+            if (transferProofImage) {
+                formData.append('TransferProofImage', transferProofImage);
+            }
 
             await AxiosSetup.put(`/Withdraw/Approval/${selectedWithdrawId}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -137,15 +146,38 @@ const StaffHandleWithdraw = () => {
             await fetchWithdrawals();
             const response = await AxiosSetup.get(`/Withdraw/${selectedWithdrawId}`);
             setDetail(response.data || null);
+            toast.success(isApproved ? 'Duyệt withdrawal thành công.' : 'Từ chối withdrawal thành công.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+            });
+            return true;
         } catch (e) {
             console.error(e);
             setModalError(isApproved ? 'Không thể duyệt withdrawal.' : 'Không thể từ chối withdrawal.');
+            toast.error(isApproved ? 'Không thể duyệt withdrawal.' : 'Không thể từ chối withdrawal.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+            });
+            return false;
         } finally {
             setActionLoading(false);
         }
     };
 
-    const handleApprove = () => handleApproval(true);
+    const handleApprove = async () => {
+        const success = await handleApproval(true);
+        if (success) closeDetail();
+    };
     const handleReject = () => {
         setModalError('');
         setConfirmRejectOpen(true);
@@ -153,7 +185,32 @@ const StaffHandleWithdraw = () => {
 
     const confirmReject = async () => {
         setConfirmRejectOpen(false);
-        await handleApproval(false);
+        const success = await handleApproval(false);
+        if (success) closeDetail();
+    };
+
+    const handleProofImageChange = (file) => {
+        if (transferProofPreview) {
+            URL.revokeObjectURL(transferProofPreview);
+        }
+
+        if (!file) {
+            setTransferProofImage(null);
+            setTransferProofPreview('');
+            return;
+        }
+
+        setTransferProofImage(file);
+        setTransferProofPreview(URL.createObjectURL(file));
+    };
+
+    const clearProofImage = () => {
+        if (transferProofPreview) {
+            URL.revokeObjectURL(transferProofPreview);
+        }
+
+        setTransferProofImage(null);
+        setTransferProofPreview('');
     };
 
     return (
@@ -315,6 +372,28 @@ const StaffHandleWithdraw = () => {
                                     </div>
                                 </div>
 
+                                <div className="staff-withdraw-page__upload-section">
+                                    <span>Transfer Proof Image</span>
+                                    <input
+                                        className="staff-withdraw-page__file-input"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleProofImageChange(e.target.files?.[0] || null)}
+                                    />
+
+                                    {transferProofPreview ? (
+                                        <div className="staff-withdraw-page__file-preview">
+                                            <img src={transferProofPreview} alt="Selected proof preview" />
+                                            <div className="staff-withdraw-page__file-preview-actions">
+                                                <p className="staff-withdraw-page__file-name">{transferProofImage?.name}</p>
+                                                <button type="button" className="staff-withdraw-page__file-remove" onClick={clearProofImage}>
+                                                    Xóa ảnh
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : null}
+                                </div>
+
                                 <div className="staff-withdraw-page__modal-actions">
                                     <button type="button" className="staff-withdraw-page__reject-btn" onClick={handleReject} disabled={actionLoading}>
                                         <FiX />
@@ -347,6 +426,8 @@ const StaffHandleWithdraw = () => {
                     </div>
                 </div>
             ) : null}
+
+            <ToastContainer position="bottom-right" autoClose={3000} theme="colored" />
         </div>
     );
 };

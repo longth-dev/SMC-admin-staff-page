@@ -289,6 +289,63 @@
     background: #eff4ff;
 }
 
+.staff-withdraw-page__upload-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #f8faff;
+    border: 1px solid #e5eeff;
+}
+
+.staff-withdraw-page__upload-section span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.staff-withdraw-page__file-input {
+    width: 100%;
+}
+
+.staff-withdraw-page__file-preview {
+    margin-top: 0.85rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.staff-withdraw-page__file-preview img {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 1rem;
+    border: 1px solid #dce9ff;
+    background: #fff;
+}
+
+.staff-withdraw-page__file-preview-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.staff-withdraw-page__file-name {
+    margin: 0;
+    color: #424654;
+    font-size: 0.9rem;
+}
+
+.staff-withdraw-page__file-remove {
+    border: 0;
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.8rem;
+    background: #ffe8e8;
+    color: #ba1a1a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
 .staff-withdraw-page__confirm-backdrop {
     position: fixed;
     inset: 0;
