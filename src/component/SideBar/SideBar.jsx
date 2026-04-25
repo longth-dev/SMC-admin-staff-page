@@ -3,7 +3,7 @@ import {
     FiUsers,
     FiBell,
     FiDollarSign,
-    FiPieChart,
+    FiClipboard,
     FiMap,
     FiTruck,
     FiAlertTriangle,
@@ -21,6 +21,7 @@ const adminMenu = [
     { label: 'Thống kê doanh thu', to: '/admin/statistics', icon: FiFileText, end: true },
     { label: 'Quản lý account', to: '/admin/accounts', icon: FiUsers },
     { label: 'Quản lý voucher', to: '/admin/vouchers', icon: FiDollarSign },
+    { label: 'Point Policy', to: '/admin/point-policy', icon: FiClipboard },
     { label: 'Quản lý thông báo', to: '/admin/notifications', icon: FiBell },
     { label: 'Phân tích heatmap', to: '/admin/heatmap', icon: FiMap },
 ];

@@ -13,6 +13,7 @@ import StaffDriverApprovalManage from './page/StaffDriverApprovalManage/StaffDri
 import StaffHandleWithdraw from './page/StaffHandleWithdraw/StaffHandleWithdraw';
 import StaffHandleIncident from './page/StaffHandleIncident/StaffHandleIncident';
 import StaffAccountManage from './page/StaffAccountManage/StaffAccountManage';
+import AdminPointPolicy from './page/AdminPointPolicy/AdminPointPolicy';
 
 const Placeholder = ({ title }) => <div style={{ padding: 24 }}>{title}</div>;
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="notifications" element={<AdminNotificationManage />} />
             <Route path="statistics" element={<AdminStatistic />} />
             <Route path="heatmap" element={<AdminHeatMapManage />} />
+            <Route path="point-policy" element={<AdminPointPolicy />} />
             <Route path="settings" element={<Placeholder title="Settings" />} />
           </Route>
         </Route>
