@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosSetup = axios.create({
-    baseURL: "https://smcride-001-site1.jtempurl.com/api",
+    baseURL: "https://dungtest-001-site1.stempurl.com/api",
     headers: {
         "Content-Type": "application/json",
     },
