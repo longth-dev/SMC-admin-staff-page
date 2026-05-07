@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FiSearch, FiMoreHorizontal, FiBarChart2, FiPower } from 'react-icons/fi';
+import { FiSearch, FiMoreHorizontal, FiBarChart2, FiPower, FiSend } from 'react-icons/fi';
 import AxiosSetup from '../../services/AxiosSetup';
 import './AdminAccountManage.css';
 
@@ -44,6 +44,9 @@ const AdminAccountManage = () => {
     const [systemUsers, setSystemUsers] = useState([]);
     const [actionLoadingId, setActionLoadingId] = useState(null);
     const [confirmState, setConfirmState] = useState({ open: false, studentId: null, fullName: '', nextState: null });
+    const [notificationState, setNotificationState] = useState({ open: false, studentId: null, fullName: '' });
+    const [notificationForm, setNotificationForm] = useState({ title: 'Thông báo xử phạt', message: '' });
+    const [notificationLoading, setNotificationLoading] = useState(false);
     const [toast, setToast] = useState({ open: false, type: 'success', message: '' });
 
     useEffect(() => {
@@ -98,6 +101,27 @@ const AdminAccountManage = () => {
         );
     }, [accounts, search]);
 
+    const roleStats = useMemo(
+        () =>
+            accounts.reduce(
+                (stats, account) => {
+                    const role = (account.role || '').toLowerCase();
+
+                    if (role.includes('driver')) {
+                        stats.drivers += 1;
+                    }
+
+                    if (role.includes('student')) {
+                        stats.students += 1;
+                    }
+
+                    return stats;
+                },
+                { drivers: 0, students: 0 }
+            ),
+        [accounts]
+    );
+
     const openConfirm = (studentId, currentIsActive, fullName) => {
         setConfirmState({
             open: true,
@@ -110,6 +134,17 @@ const AdminAccountManage = () => {
     const closeConfirm = () => {
         if (actionLoadingId) return;
         setConfirmState({ open: false, studentId: null, fullName: '', nextState: null });
+    };
+
+    const openNotification = (studentId, fullName) => {
+        setNotificationState({ open: true, studentId, fullName });
+        setNotificationForm({ title: 'Thông báo xử phạt', message: '' });
+    };
+
+    const closeNotification = () => {
+        if (notificationLoading) return;
+        setNotificationState({ open: false, studentId: null, fullName: '' });
+        setNotificationForm({ title: '', message: '' });
     };
 
     const showToast = (message, type = 'success') => {
@@ -146,6 +181,38 @@ const AdminAccountManage = () => {
         }
     };
 
+    const sendNotificationToStudent = async () => {
+        const { studentId } = notificationState;
+        if (!studentId || !notificationForm.title.trim() || !notificationForm.message.trim()) {
+            showToast('Vui lòng nhập tiêu đề và nội dung thông báo.', 'error');
+            return;
+        }
+
+        try {
+            setNotificationLoading(true);
+            await AxiosSetup.post('/Admin/notifications/direct', {
+                studentId,
+                title: notificationForm.title.trim(),
+                message: notificationForm.message.trim(),
+            });
+
+            setAccounts((currentAccounts) =>
+                currentAccounts.map((account) =>
+                    account.id === studentId ? { ...account, isBanNotificationSent: true } : account
+                )
+            );
+
+            closeNotification();
+            showToast(`Đã gửi thông báo tới ${notificationState.fullName}.`, 'success');
+        } catch (err) {
+            console.error(err);
+            setError('Không thể gửi thông báo.');
+            showToast('Gửi thông báo thất bại.', 'error');
+        } finally {
+            setNotificationLoading(false);
+        }
+    };
+
     return (
         <div className="admin-account">
             <header className="admin-account__header">
@@ -172,19 +239,25 @@ const AdminAccountManage = () => {
                         <div>
                             <div className="admin-account__role-head">
                                 <span>Drivers</span>
-                                <span>1</span>
+                                <span>{roleStats.drivers}</span>
                             </div>
                             <div className="admin-account__progress">
-                                <div className="admin-account__progress-fill admin-account__progress-fill--primary" style={{ width: '75%' }} />
+                                <div
+                                    className="admin-account__progress-fill admin-account__progress-fill--primary"
+                                    style={{ width: `${Math.max(8, Math.min(100, roleStats.drivers * 12 || 8))}%` }}
+                                />
                             </div>
                         </div>
                         <div>
                             <div className="admin-account__role-head">
                                 <span>Students</span>
-                                <span>2</span>
+                                <span>{roleStats.students}</span>
                             </div>
                             <div className="admin-account__progress">
-                                <div className="admin-account__progress-fill admin-account__progress-fill--secondary" style={{ width: '85%' }} />
+                                <div
+                                    className="admin-account__progress-fill admin-account__progress-fill--secondary"
+                                    style={{ width: `${Math.max(8, Math.min(100, roleStats.students * 12 || 8))}%` }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -276,9 +349,19 @@ const AdminAccountManage = () => {
                                                     <span>{formatDate(account.createdAt)}</span>
                                                     <button
                                                         type="button"
+                                                        className={`admin-account__action-btn admin-account__action-btn--secondary ${account.isBanNotificationSent ? 'admin-account__action-btn--sent' : ''}`}
+                                                        onClick={() => openNotification(account.id, account.fullName)}
+                                                        disabled={actionLoadingId === account.id || notificationLoading}
+                                                        aria-label={account.isBanNotificationSent ? 'Đã gửi thông báo xử phạt' : 'Gửi thông báo xử phạt'}
+                                                    >
+                                                        <FiSend />
+                                                        {account.isBanNotificationSent ? 'Đã gửi' : 'Thông báo'}
+                                                    </button>
+                                                    <button
+                                                        type="button"
                                                         className="admin-account__action-btn"
                                                         onClick={() => openConfirm(account.id, account.isActive, account.fullName)}
-                                                        disabled={actionLoadingId === account.id}
+                                                        disabled={actionLoadingId === account.id || notificationLoading}
                                                         aria-label={account.isActive ? 'Khóa tài khoản' : 'Kích hoạt tài khoản'}
                                                     >
                                                         <FiPower />
@@ -347,6 +430,52 @@ const AdminAccountManage = () => {
                             </button>
                             <button type="button" className="admin-account__modal-btn admin-account__modal-btn--primary" onClick={confirmToggleStudentActive}>
                                 Xác nhận
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {notificationState.open ? (
+                <div className="admin-account__modal-backdrop" role="presentation" onClick={closeNotification}>
+                    <div
+                        className="admin-account__modal admin-account__modal--notification"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="admin-account-notify-title"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <div className="admin-account__modal-icon">
+                            <FiSend />
+                        </div>
+                        <h3 id="admin-account-notify-title">Gửi thông báo</h3>
+                        <p>
+                            Gửi thông báo trực tiếp tới <strong>{notificationState.fullName}</strong>.
+                        </p>
+                        <div className="admin-account__form">
+                            <input
+                                type="text"
+                                value={notificationForm.title}
+                                readOnly
+                            />
+                            <textarea
+                                rows="4"
+                                placeholder="Nội dung thông báo"
+                                value={notificationForm.message}
+                                onChange={(e) => setNotificationForm((current) => ({ ...current, message: e.target.value }))}
+                            />
+                        </div>
+                        <div className="admin-account__modal-actions">
+                            <button type="button" className="admin-account__modal-btn admin-account__modal-btn--ghost" onClick={closeNotification}>
+                                Hủy
+                            </button>
+                            <button
+                                type="button"
+                                className="admin-account__modal-btn admin-account__modal-btn--primary"
+                                onClick={sendNotificationToStudent}
+                                disabled={notificationLoading}
+                            >
+                                {notificationLoading ? 'Đang gửi...' : 'Gửi thông báo'}
                             </button>
                         </div>
                     </div>

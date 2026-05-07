@@ -10,6 +10,7 @@ import {
     FiFileText,
     FiSettings,
     FiLogOut,
+    FiMessageSquare,
 } from 'react-icons/fi';
 import logo from '../../assets/smc.png';
 import './SideBar.css';
@@ -29,6 +30,7 @@ const adminMenu = [
 const staffMenu = [
     { label: 'Duyệt Driver', to: '/staff/drivers', icon: FiTruck, end: true },
     { label: 'Xử lý khiếu nại và bồi thường', to: '/staff/complaints', icon: FiAlertTriangle },
+    { label: 'Quản lý review', to: '/staff/reviews', icon: FiMessageSquare },
     { label: 'Xử lý rút tiền', to: '/staff/withdrawals', icon: FiDollarSign },
     { label: 'Quản lý account', to: '/staff/accounts', icon: FiUsers },
 ];

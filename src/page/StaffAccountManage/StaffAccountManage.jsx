@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiSearch, FiLock, FiChevronLeft, FiChevronRight, FiMoreVertical } from 'react-icons/fi';
+import { FiSearch, FiLock, FiChevronLeft, FiChevronRight, FiMoreVertical, FiSend } from 'react-icons/fi';
 import AxiosSetup from '../../services/AxiosSetup';
 import './StaffAccountManage.css';
 
@@ -22,11 +22,15 @@ const normalizeAccount = (item) => ({
     phoneNumber: item.phoneNumber || '-',
     studentCode: item.studentCode || '-',
     university: item.university || '-',
+    isBanNotificationSent: Boolean(item.isBanNotificationSent),
 });
 
 const StaffAccountManage = () => {
     const [search, setSearch] = useState('');
     const [selectedAccount, setSelectedAccount] = useState(null);
+    const [notificationTarget, setNotificationTarget] = useState(null);
+    const [notificationForm, setNotificationForm] = useState({ title: 'Thông báo xử phạt', message: '' });
+    const [notificationLoading, setNotificationLoading] = useState(false);
     const [toast, setToast] = useState('');
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -108,6 +112,45 @@ const StaffAccountManage = () => {
             showToast(selectedAccount.nextActive ? 'Không thể mở khóa tài khoản.' : 'Không thể khóa tài khoản.');
         } finally {
             setSelectedAccount(null);
+        }
+    };
+
+    const openNotification = (account) => {
+        setNotificationTarget(account);
+        setNotificationForm({ title: 'Thông báo xử phạt', message: '' });
+    };
+
+    const closeNotification = () => {
+        if (notificationLoading) return;
+        setNotificationTarget(null);
+        setNotificationForm({ title: 'Thông báo xử phạt', message: '' });
+    };
+
+    const sendNotification = async () => {
+        if (!notificationTarget) return;
+        if (!notificationForm.message.trim()) {
+            showToast('Vui lòng nhập nội dung thông báo.');
+            return;
+        }
+
+        try {
+            setNotificationLoading(true);
+            await AxiosSetup.post('/Admin/notifications/direct', {
+                studentId: notificationTarget.id,
+                title: 'Thông báo xử phạt',
+                message: notificationForm.message.trim(),
+            });
+            showToast(`Đã gửi thông báo tới ${notificationTarget.name}`);
+            await fetchAccounts();
+            setNotificationTarget((current) =>
+                current ? { ...current, isBanNotificationSent: true } : current
+            );
+            closeNotification();
+        } catch (e) {
+            console.error(e);
+            showToast('Không thể gửi thông báo.');
+        } finally {
+            setNotificationLoading(false);
         }
     };
 
@@ -212,6 +255,14 @@ const StaffAccountManage = () => {
                                                 <td>{account.lastLogin}</td>
                                                 <td className="admin-account__text-right">
                                                     <div className="admin-account__row-actions">
+                                                        <button
+                                                            type="button"
+                                                            className={`admin-account__action-btn staff-account__action-btn staff-account__action-btn--secondary ${account.isBanNotificationSent ? 'staff-account__action-btn--sent' : ''}`}
+                                                            onClick={() => openNotification(account)}
+                                                        >
+                                                            <FiSend />
+                                                            {account.isBanNotificationSent ? 'Đã gửi' : 'Thông báo'}
+                                                        </button>
                                                         {account.status === 'Active' ? (
                                                             <button type="button" className="admin-account__action-btn staff-account__action-btn staff-account__action-btn--danger" onClick={() => handleLock(account)}>
                                                                 <FiLock />
@@ -257,6 +308,35 @@ const StaffAccountManage = () => {
                             </button>
                             <button type="button" className="admin-account__modal-btn admin-account__modal-btn--primary" onClick={confirmLock}>
                                 Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {notificationTarget ? (
+                <div className="admin-account__modal-backdrop" role="presentation" onClick={closeNotification}>
+                    <div className="admin-account__modal admin-account__modal--notification" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-account__modal-icon"><FiSend /></div>
+                        <h3>Gửi thông báo</h3>
+                        <p>
+                            Gửi thông báo trực tiếp tới <strong>{notificationTarget.name}</strong>.
+                        </p>
+                        <div className="admin-account__form">
+                            <input type="text" value="Thông báo xử phạt" disabled />
+                            <textarea
+                                rows="4"
+                                placeholder="Nhập nội dung thông báo..."
+                                value={notificationForm.message}
+                                onChange={(e) => setNotificationForm((current) => ({ ...current, message: e.target.value }))}
+                            />
+                        </div>
+                        <div className="admin-account__modal-actions">
+                            <button type="button" className="admin-account__modal-btn admin-account__modal-btn--ghost" onClick={closeNotification}>
+                                Hủy
+                            </button>
+                            <button type="button" className="admin-account__modal-btn admin-account__modal-btn--primary" onClick={sendNotification} disabled={notificationLoading}>
+                                {notificationLoading ? 'Đang gửi...' : 'Gửi thông báo'}
                             </button>
                         </div>
                     </div>

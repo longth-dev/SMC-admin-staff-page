@@ -238,7 +238,7 @@ const AdminHeatMapManage = () => {
                                         <span>{driver.phoneNumber || `Mã tài xế: ${driver.driverProfileId}`}</span>
                                     </div>
                                     <span className={`admin-heatmap-page__status admin-heatmap-page__status--${getDriverStatusClass(driver.approvalStatus)}`}>
-                                        {driver.approvalStatus || 'Inactive'}
+                                        {driver.approvalStatus}
                                     </span>
                                 </div>
                             ))
@@ -293,11 +293,6 @@ const AdminHeatMapManage = () => {
                         </MapContainer>
 
                         <div className="admin-heatmap-page__map-glow-overlay" />
-
-                        <div className="admin-heatmap-page__map-legend">
-                            <span><i className="admin-heatmap-page__legend-dot admin-heatmap-page__legend-dot--pickup" /> Điểm đón</span>
-                            <span><i className="admin-heatmap-page__legend-dot admin-heatmap-page__legend-dot--dropoff" /> Điểm trả</span>
-                        </div>
                     </div>
                 </article>
             </section>

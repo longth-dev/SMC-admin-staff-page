@@ -13,6 +13,7 @@ import StaffDriverApprovalManage from '../page/StaffDriverApprovalManage/StaffDr
 import StaffHandleWithdraw from '../page/StaffHandleWithdraw/StaffHandleWithdraw';
 import StaffHandleIncident from '../page/StaffHandleIncident/StaffHandleIncident';
 import StaffAccountManage from '../page/StaffAccountManage/StaffAccountManage';
+import StaffReview from '../page/StaffReivew/StaffReview';
 import AdminPointPolicy from '../page/AdminPointPolicy/AdminPointPolicy';
 
 const Placeholder = ({ title }) => <div style={{ padding: 24 }}>{title}</div>;
@@ -39,6 +40,7 @@ const AppRouter = () => (
         <Route path="/staff" element={<LayoutStaff />}>
           <Route path="drivers" element={<StaffDriverApprovalManage />} />
           <Route path="complaints" element={<StaffHandleIncident />} />
+          <Route path="reviews" element={<StaffReview />} />
           <Route path="accounts" element={<StaffAccountManage />} />
           <Route path="withdrawals" element={<StaffHandleWithdraw />} />
         </Route>

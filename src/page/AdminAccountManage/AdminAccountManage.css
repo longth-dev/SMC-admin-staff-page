@@ -143,6 +143,12 @@
   color: #855300;
 }
 
+.admin-account__action-btn--secondary.admin-account__action-btn--sent {
+  background: rgba(18, 183, 106, 0.1);
+  color: #12b76a;
+  border-color: rgba(18, 183, 106, 0.18);
+}
+
 .admin-account__panel--table {
   display: flex;
   flex-direction: column;
@@ -272,6 +278,11 @@
   font-weight: 700;
 }
 
+.admin-account__action-btn--secondary {
+  background: #eff4ff;
+  color: #0040a2;
+}
+
 .admin-account__action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -353,6 +364,31 @@
   margin: 12px 0 0;
   color: #424654;
   line-height: 1.6;
+}
+
+.admin-account__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.admin-account__form input,
+.admin-account__form textarea {
+  width: 100%;
+  border: 1px solid rgba(195, 198, 215, 0.45);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.admin-account__form input:focus,
+.admin-account__form textarea:focus {
+  border-color: #0053ce;
+  box-shadow: 0 0 0 4px rgba(0, 83, 206, 0.12);
 }
 
 .admin-account__modal-actions {

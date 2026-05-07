@@ -24,19 +24,33 @@ const formatMoney = (value) => {
     }).format(value);
 };
 
+const getYearFromSummary = (value) => Number(value) || new Date().getFullYear();
+
 const AdminStatistic = () => {
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [chartType, setChartType] = useState('area');
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [isYearMenuOpen, setIsYearMenuOpen] = useState(false);
+    const [showAllMonths, setShowAllMonths] = useState(false);
+
+    const availableYears = useMemo(() => {
+        const currentYear = new Date().getFullYear();
+        return Array.from({ length: 11 }, (_, index) => currentYear - index);
+    }, []);
 
     useEffect(() => {
         const fetchSummary = async () => {
             try {
                 setLoading(true);
                 setError('');
-                const response = await AxiosSetup.get('/Admin/dashboard/summary');
+                const response = await AxiosSetup.get('/Admin/dashboard/summary', {
+                    params: { year: selectedYear },
+                });
                 setSummary(response.data);
+                setSelectedYear(getYearFromSummary(response.data?.year ?? selectedYear));
             } catch (err) {
                 console.error(err);
                 setError('Không thể tải dữ liệu thống kê.');
@@ -46,7 +60,7 @@ const AdminStatistic = () => {
         };
 
         fetchSummary();
-    }, []);
+    }, [selectedYear]);
 
     const chartData = useMemo(() => {
         const monthlyRevenue = summary?.monthlyRevenue ?? [];
@@ -64,6 +78,49 @@ const AdminStatistic = () => {
     const pieChartData = useMemo(() => chartData.filter((item) => item.revenue > 0), [chartData]);
 
     const pieColors = ['#0053ce', '#306deb', '#4b82f0', '#6c9cf3', '#8cb3f7', '#aac9fb', '#c7dafa', '#dce7fd', '#edf2ff', '#b5c8ff', '#87a8f9', '#5f89ef'];
+
+    const handleYearSelect = (nextYear) => {
+        setSelectedYear(nextYear);
+        setIsYearMenuOpen(false);
+    };
+
+    const toggleYearMenu = () => {
+        setIsYearMenuOpen((current) => !current);
+    };
+
+    const handleDownloadReport = async () => {
+        try {
+            setIsDownloading(true);
+            const response = await AxiosSetup.get('/Admin/dashboard/summary/export-excel', {
+                params: { year: selectedYear },
+                responseType: 'blob',
+            });
+
+            const blob = new Blob([response.data], { type: response.headers['content-type'] || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `dashboard-summary-${selectedYear}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+        } catch (err) {
+            console.error(err);
+            setError('Không thể xuất báo cáo.');
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    const monthRows = useMemo(() => {
+        return chartData.map((item) => ({
+            ...item,
+            hasRevenue: item.revenue > 0,
+        }));
+    }, [chartData]);
+
+    const selectedMonthCount = monthRows.filter((item) => item.hasRevenue).length;
 
     const kpis = [
         {
@@ -106,14 +163,37 @@ const AdminStatistic = () => {
                 </div>
 
                 <div className="admin-stat__actions">
-                    <button type="button" className="admin-stat__chip">
-                        <span className="material-symbols-outlined">calendar_today</span>
-                        {summary?.year ?? 'Đang tải...'}
-                        <span className="material-symbols-outlined">expand_more</span>
+                    <button
+                        type="button"
+                        className="admin-stat__chip"
+                        onClick={toggleYearMenu}
+                    >
+                        <span className="material-symbols-outlined">Năm -</span>
+                        {selectedYear}
+
                     </button>
-                    <button type="button" className="admin-stat__primary-btn">
-                        <span className="material-symbols-outlined">download</span>
-                        Xuất báo cáo
+                    {isYearMenuOpen ? (
+                        <div className="admin-stat__year-menu" role="listbox" aria-label="Chọn năm">
+                            {availableYears.map((year) => (
+                                <button
+                                    key={year}
+                                    type="button"
+                                    className={`admin-stat__year-option ${year === selectedYear ? 'is-active' : ''}`}
+                                    onClick={() => handleYearSelect(year)}
+                                >
+                                    {year}
+                                </button>
+                            ))}
+                        </div>
+                    ) : null}
+                    <button
+                        type="button"
+                        className="admin-stat__primary-btn"
+                        onClick={handleDownloadReport}
+                        disabled={isDownloading}
+                    >
+                        <span className="material-symbols-outlined">Xuất File Excel</span>
+                        {isDownloading ? 'Đang xuất...' : ''}
                     </button>
                 </div>
             </header>
@@ -168,7 +248,7 @@ const AdminStatistic = () => {
                                 <div className="admin-stat__loading">Đang tải dữ liệu...</div>
                             ) : chartType === 'area' ? (
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={chartData} margin={{ top: 20, right: 16, left: 0, bottom: 0 }}>
+                                    <AreaChart data={chartData} margin={{ top: 20, right: 16, left: 24, bottom: 0 }}>
                                         <defs>
                                             <linearGradient id="revenueGradient" x1="0" x2="0" y1="0" y2="1">
                                                 <stop offset="5%" stopColor="#0053ce" stopOpacity={0.25} />
@@ -177,7 +257,13 @@ const AdminStatistic = () => {
                                         </defs>
                                         <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#d3e4fe" />
                                         <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                                        <YAxis tickFormatter={(value) => formatMoney(value)} tickLine={false} axisLine={false} />
+                                        <YAxis
+                                            width={84}
+                                            tickMargin={10}
+                                            tickFormatter={(value) => formatMoney(value)}
+                                            tickLine={false}
+                                            axisLine={false}
+                                        />
                                         <Tooltip
                                             formatter={(value) => [`${formatMoney(value)} ₫`, '']}
                                             labelFormatter={(label) => `Tháng ${label}`}
@@ -245,7 +331,32 @@ const AdminStatistic = () => {
                         )}
                     </div>
 
-                    <button type="button" className="admin-stat__outline-btn">Xem tất cả tháng</button>
+                    <button
+                        type="button"
+                        className="admin-stat__outline-btn"
+                        onClick={() => setShowAllMonths((current) => !current)}
+                    >
+                        {showAllMonths ? 'Thu gọn tháng' : 'Xem tất cả tháng'}
+                    </button>
+
+                    {showAllMonths ? (
+                        <div className="admin-stat-months">
+                            <div className="admin-stat-months__head">
+                                <h4>Chi tiết theo tháng</h4>
+                                <span>{selectedMonthCount}/12 tháng có doanh thu</span>
+                            </div>
+
+                            <div className="admin-stat-months__grid">
+                                {monthRows.map((item) => (
+                                    <article key={item.month} className={`admin-stat-month-card ${item.hasRevenue ? 'admin-stat-month-card--active' : ''}`}>
+                                        <div className="admin-stat-month-card__label">Tháng {item.month}</div>
+                                        <strong>{formatMoney(item.revenue)} ₫</strong>
+                                        <span>{item.hasRevenue ? 'Có doanh thu' : 'Chưa phát sinh'}</span>
+                                    </article>
+                                ))}
+                            </div>
+                        </div>
+                    ) : null}
                 </aside>
             </section>
         </div>

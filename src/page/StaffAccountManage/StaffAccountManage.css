@@ -40,6 +40,12 @@
   background: linear-gradient(135deg, #0f9d58, #2fbf71);
 }
 
+.staff-account__action-btn--sent {
+  background: linear-gradient(135deg, #12b76a, #079455);
+  color: #ffffff;
+  border-color: rgba(18, 183, 106, 0.18);
+}
+
 @media (max-width: 1280px) {
   .staff-account {
     gap: 22px;
