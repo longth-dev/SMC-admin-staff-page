@@ -52,7 +52,7 @@ const StudentReview = () => {
             setSelectedStudentId((current) => current ?? data[0]?.user?.studentId ?? null);
         } catch (err) {
             console.error(err);
-            setError('Không thể tải dữ liệu review của student.');
+            setError('Không thể tải dữ liệu đánh giá của sinh viên.');
         } finally {
             setLoading(false);
         }
@@ -130,8 +130,8 @@ const StudentReview = () => {
         <div className="student-review-page">
             <header className="staff-review-page__header">
                 <div>
-                    <h2>Quản lý review student</h2>
-                    <p>Theo dõi danh sách review đã gửi, review đã nhận và điểm đánh giá của từng student.</p>
+                    <h2>Quản lý đánh giá sinh viên</h2>
+                    <p>Theo dõi danh sách đánh giá đã gửi, đánh giá đã nhận và điểm trung bình của từng sinh viên.</p>
                 </div>
 
                 <button type="button" className="staff-review-page__refresh" onClick={fetchReviews} disabled={loading}>
@@ -148,7 +148,7 @@ const StudentReview = () => {
                         <FiUsers />
                     </span>
                     <div>
-                        <p>Tổng student</p>
+                        <p>Tổng sinh viên</p>
                         <strong>{stats.totalUsers}</strong>
                     </div>
                 </article>
@@ -168,7 +168,7 @@ const StudentReview = () => {
                         <FiMessageSquare />
                     </span>
                     <div>
-                        <p>Review đã nhận</p>
+                        <p>Đánh giá đã nhận</p>
                         <strong>{stats.totalReceived}</strong>
                     </div>
                 </article>
@@ -178,7 +178,7 @@ const StudentReview = () => {
                         <FiTrendingUp />
                     </span>
                     <div>
-                        <p>Review đã gửi</p>
+                        <p>Đánh giá đã gửi</p>
                         <strong>{stats.totalSent}</strong>
                     </div>
                 </article>
@@ -188,8 +188,8 @@ const StudentReview = () => {
                 <aside className="staff-review-page__sidebar">
                     <div className="staff-review-page__panel-head">
                         <div>
-                            <h3>Danh sách student</h3>
-                            <p>Chọn một student để xem chi tiết review.</p>
+                            <h3>Danh sách sinh viên</h3>
+                            <p>Chọn một sinh viên để xem chi tiết đánh giá.</p>
                         </div>
                     </div>
 
@@ -216,14 +216,14 @@ const StudentReview = () => {
                             className={viewMode === 'with-received' ? 'is-active' : ''}
                             onClick={() => setViewMode('with-received')}
                         >
-                            Có review nhận
+Có đánh giá nhận
                         </button>
                         <button
                             type="button"
                             className={viewMode === 'with-sent' ? 'is-active' : ''}
                             onClick={() => setViewMode('with-sent')}
                         >
-                            Có review gửi
+Có đánh giá gửi
                         </button>
                     </div>
 
@@ -231,7 +231,7 @@ const StudentReview = () => {
                         {loading ? (
                             <div className="staff-review-page__loading">Đang tải dữ liệu...</div>
                         ) : visibleUsers.length === 0 ? (
-                            <div className="staff-review-page__empty">Không tìm thấy student phù hợp.</div>
+                            <div className="staff-review-page__empty">Không tìm thấy sinh viên phù hợp.</div>
                         ) : (
                             <>
                                 {displayedUsers.map((item) => {
@@ -269,7 +269,7 @@ const StudentReview = () => {
                                     >
                                         {expandedStudentList
                                             ? 'Thu gọn danh sách'
-                                            : `Xem thêm ${visibleUsers.length - studentPreviewLimit} student`}
+                                            : `Xem thêm ${visibleUsers.length - studentPreviewLimit} sinh viên`}
                                     </button>
                                 ) : null}
                             </>
@@ -282,7 +282,7 @@ const StudentReview = () => {
                         <div className="staff-review-page__panel-head">
                             <div>
                                 <h3>Chi tiết review</h3>
-                                <p>Review nhận và gửi của staff đang được chọn.</p>
+                                <p>Đánh giá đã nhận và đã gửi của sinh viên đang được chọn.</p>
                             </div>
                         </div>
 
@@ -309,7 +309,7 @@ const StudentReview = () => {
                                         <strong>{selectedUser.sentCount ?? 0}</strong>
                                     </div>
                                     <div>
-                                        <span>Tổng rating</span>
+                                        <span>Tổng đánh giá</span>
                                         <strong>{selectedUser.user?.totalRatingCount ?? 0}</strong>
                                     </div>
                                 </div>
@@ -323,21 +323,21 @@ const StudentReview = () => {
                         <article className="staff-review-page__panel">
                             <div className="staff-review-page__panel-head">
                                 <div>
-                                    <h3>Review đã nhận</h3>
-                                    <p>Từ khách hàng hoặc staff khác gửi tới.</p>
+                                    <h3>Đánh giá đã nhận</h3>
+                                    <p>Từ khách hàng hoặc nhân viên khác gửi tới.</p>
                                 </div>
                             </div>
 
                             <div className="staff-review-page__review-list">
                                 {receivedReviews.length === 0 ? (
-                                    <div className="staff-review-page__empty">Chưa có review đã nhận.</div>
+                                    <div className="staff-review-page__empty">Chưa có đánh giá đã nhận.</div>
                                 ) : (
                                     receivedReviews.map((review) => (
                                         <article key={review.reviewId} className="staff-review-page__review-card">
                                             <div className="staff-review-page__review-top">
                                                 <div>
                                                     <strong>{review.fromFullName}</strong>
-                                                    <span>Trip #{review.tripId} · {formatDate(review.createdAt)}</span>
+                                                    <span>Chuyến #{review.tripId} · {formatDate(review.createdAt)}</span>
                                                 </div>
                                                 <div className="staff-review-page__rating-pill">
                                                     <FiStar />
@@ -354,14 +354,14 @@ const StudentReview = () => {
                         <article className="staff-review-page__panel">
                             <div className="staff-review-page__panel-head">
                                 <div>
-                                    <h3>Review đã gửi</h3>
-                                    <p>Danh sách review staff đã gửi cho người khác.</p>
+                                    <h3>Đánh giá đã gửi</h3>
+                                    <p>Danh sách đánh giá mà sinh viên đã gửi cho người khác.</p>
                                 </div>
                             </div>
 
                             <div className="staff-review-page__review-list">
                                 {sentReviews.length === 0 ? (
-                                    <div className="staff-review-page__empty">Chưa có review đã gửi.</div>
+                                    <div className="staff-review-page__empty">Chưa có đánh giá đã gửi.</div>
                                 ) : (
                                     sentReviews.map((review) => (
                                         <article key={review.reviewId} className="staff-review-page__review-card staff-review-page__review-card--sent">

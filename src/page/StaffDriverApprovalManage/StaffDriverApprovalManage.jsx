@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiCheckCircle, FiClock, FiFileText, FiSearch, FiTruck, FiX } from 'react-icons/fi';
+import { FiCheckCircle, FiFileText, FiSearch, FiTruck, FiX } from 'react-icons/fi';
 import { toast, ToastContainer } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import AxiosSetup from '../../services/AxiosSetup';
@@ -23,10 +23,10 @@ const formatDateTime = (value) => {
 const getStatusClass = (status) => String(status || 'Pending').toLowerCase();
 
 const STATUS_FILTERS = [
-    { value: 'all', label: 'All' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'approved', label: 'Approved' },
-    { value: 'rejected', label: 'Rejected' },
+    { value: 'all', label: 'Tất cả' },
+    { value: 'pending', label: 'Đang chờ' },
+    { value: 'approved', label: 'Đã duyệt' },
+    { value: 'rejected', label: 'Đã từ chối' },
 ];
 
 const StaffDriverApprovalManage = () => {
@@ -58,7 +58,7 @@ const StaffDriverApprovalManage = () => {
             const rawId = decoded[ROLE_CLAIM] || decoded.nameid || decoded.systemUserId || decoded.userId;
             return Number(rawId) || 0;
         } catch (e) {
-            console.error('Cannot decode token', e);
+            console.error('Không thể giải mã token', e);
             return 0;
         }
     }, []);
@@ -83,7 +83,7 @@ const StaffDriverApprovalManage = () => {
             setDrivers(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             console.error(e);
-            setError('Không thể tải danh sách driver.');
+            setError('Không thể tải danh sách tài xế.');
         } finally {
             setLoading(false);
         }
@@ -124,7 +124,7 @@ const StaffDriverApprovalManage = () => {
             setDriverDetail(response.data || null);
         } catch (e) {
             console.error(e);
-            setModalError('Không thể tải chi tiết driver.');
+            setModalError('Không thể tải chi tiết tài xế.');
         } finally {
             setDetailLoading(false);
         }
@@ -141,7 +141,7 @@ const StaffDriverApprovalManage = () => {
             setVehicleItems(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             console.error(e);
-            setModalError('Không thể tải danh sách vehicle.');
+            setModalError('Không thể tải danh sách phương tiện.');
         } finally {
             setVehicleLoading(false);
         }
@@ -181,11 +181,11 @@ const StaffDriverApprovalManage = () => {
             await fetchDrivers();
             const response = await AxiosSetup.get(`/DriverProfile/${selectedDriver}`);
             setDriverDetail(response.data || null);
-            showToast(isApproved ? 'Duyệt driver thành công.' : 'Từ chối driver thành công.');
+            showToast(isApproved ? 'Duyệt tài xế thành công.' : 'Từ chối tài xế thành công.');
             return true;
         } catch (e) {
             console.error(e);
-            setModalError(isApproved ? 'Không thể duyệt driver.' : 'Không thể từ chối driver.');
+            setModalError(isApproved ? 'Không thể duyệt tài xế.' : 'Không thể từ chối tài xế.');
             return false;
         } finally {
             setActionLoading(false);
@@ -223,11 +223,11 @@ const StaffDriverApprovalManage = () => {
                 setVehicleItems(Array.isArray(response.data) ? response.data : []);
             }
 
-            showToast(isApproved ? 'Duyệt vehicle thành công.' : 'Từ chối vehicle thành công.');
+            showToast(isApproved ? 'Duyệt phương tiện thành công.' : 'Từ chối phương tiện thành công.');
             return true;
         } catch (e) {
             console.error(e);
-            setModalError(isApproved ? 'Không thể duyệt vehicle.' : 'Không thể từ chối vehicle.');
+            setModalError(isApproved ? 'Không thể duyệt phương tiện.' : 'Không thể từ chối phương tiện.');
             return false;
         } finally {
             setVehicleActionLoading(false);
@@ -255,9 +255,9 @@ const StaffDriverApprovalManage = () => {
         <div className="staff-driver-approval">
             <div className="staff-driver-approval__header">
                 <div>
-                    <p className="staff-driver-approval__eyebrow">Staff workspace</p>
-                    <h2>Duyệt Driver</h2>
-                    <p>Quản lý danh sách driver đăng ký và xem chi tiết hồ sơ để phê duyệt.</p>
+                    <p className="staff-driver-approval__eyebrow">Khu vực nhân viên</p>
+                    <h2>Duyệt tài xế</h2>
+                    <p>Quản lý danh sách tài xế đăng ký và xem chi tiết hồ sơ để phê duyệt.</p>
                 </div>
 
                 <div className="staff-driver-approval__filters">
@@ -267,7 +267,7 @@ const StaffDriverApprovalManage = () => {
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Tìm theo ID, giấy phép, trạng thái..."
+                            placeholder="Tìm theo mã, giấy phép, trạng thái..."
                         />
                     </div>
 
@@ -311,12 +311,12 @@ const StaffDriverApprovalManage = () => {
                         <table className="staff-driver-approval__table">
                             <thead>
                                 <tr>
-                                    <th>Driver Profile</th>
-                                    <th>Student ID</th>
-                                    <th>Driver License</th>
-                                    <th>Requested At</th>
-                                    <th>Status</th>
-                                    <th className="staff-driver-approval__actions-head">Actions</th>
+                                    <th>Mã hồ sơ</th>
+                                    <th>Họ và tên</th>
+                                    <th>Số giấy phép</th>
+                                    <th>Thời gian yêu cầu</th>
+                                    <th>Trạng thái</th>
+                                    <th className="staff-driver-approval__actions-head">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -332,23 +332,23 @@ const StaffDriverApprovalManage = () => {
                                             <td>
                                                 <strong>#{driver.driverProfileId}</strong>
                                             </td>
-                                            <td>{driver.studentId}</td>
+                                            <td>{driver.studentFullName || '-'}</td>
                                             <td>{driver.driverLicenseNumber || '-'}</td>
                                             <td>{formatDateTime(driver.studentRequestedAt)}</td>
                                             <td>
                                                 <span className={`staff-driver-approval__status staff-driver-approval__status--${getStatusClass(driver.approvalStatus)}`}>
-                                                    {driver.approvalStatus || 'Pending'}
+                                                    {driver.approvalStatus || 'Đang chờ'}
                                                 </span>
                                             </td>
                                             <td>
                                                 <div className="staff-driver-approval__actions">
                                                     <button type="button" className="staff-driver-approval__icon-btn" onClick={() => openDetail(driver.driverProfileId)}>
                                                         <FiFileText />
-                                                        View Detail
+                                                        Xem chi tiết
                                                     </button>
                                                     <button type="button" className="staff-driver-approval__icon-btn staff-driver-approval__icon-btn--secondary" onClick={() => openVehicle(driver.driverProfileId)}>
                                                         <FiTruck />
-                                                        View Vehicle
+                                                        Xem phương tiện
                                                     </button>
                                                 </div>
                                             </td>
@@ -382,11 +382,11 @@ const StaffDriverApprovalManage = () => {
                             <>
                                 <div className="staff-driver-approval__detail-grid">
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Student ID</span>
-                                        <strong>{driverDetail.studentId}</strong>
+                                        <span>Họ và tên sinh viên</span>
+                                        <strong>{driverDetail.studentFullName || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Full Name</span>
+                                        <span>Họ và tên</span>
                                         <strong>{driverDetail.fullName || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
@@ -394,74 +394,74 @@ const StaffDriverApprovalManage = () => {
                                         <strong>{driverDetail.email || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Gender</span>
+                                        <span>Giới tính</span>
                                         <strong>{driverDetail.gender || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Student Code</span>
+                                        <span>Mã sinh viên</span>
                                         <strong>{driverDetail.studentCode || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Status</span>
+                                        <span>Trạng thái</span>
                                         <strong>{driverDetail.approvalStatus || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Driver License Number</span>
+                                        <span>Số giấy phép lái xe</span>
                                         <strong>{driverDetail.driverLicenseNumber || '-'}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Requested At</span>
+                                        <span>Thời gian yêu cầu</span>
                                         <strong>{formatDateTime(driverDetail.studentRequestedAt)}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Approved At</span>
+                                        <span>Thời gian duyệt</span>
                                         <strong>{formatDateTime(driverDetail.approvedAt)}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
-                                        <span>Consecutive Reject Count</span>
+                                        <span>Số lần từ chối liên tiếp</span>
                                         <strong>{driverDetail.consecutiveRejectCount ?? 0}</strong>
                                     </div>
                                 </div>
 
                                 <div className="staff-driver-approval__detail-images">
                                     <div>
-                                        <span>Citizen ID image</span>
+                                        <span>Ảnh căn cước công dân</span>
                                         {driverDetail.citizenIdImage ? (
                                             <a href={driverDetail.citizenIdImage} target="_blank" rel="noreferrer">
-                                                <img src={driverDetail.citizenIdImage} alt="Citizen ID" />
+                                                <img src={driverDetail.citizenIdImage} alt="Ảnh căn cước công dân" />
                                             </a>
                                         ) : (
-                                            <div className="staff-driver-approval__image-empty">No image</div>
+                                            <div className="staff-driver-approval__image-empty">Không có ảnh</div>
                                         )}
                                     </div>
                                     <div>
-                                        <span>Student card image</span>
+                                        <span>Ảnh thẻ sinh viên</span>
                                         {driverDetail.studentCardImage ? (
                                             <a href={driverDetail.studentCardImage} target="_blank" rel="noreferrer">
-                                                <img src={driverDetail.studentCardImage} alt="Student card" />
+                                                <img src={driverDetail.studentCardImage} alt="Ảnh thẻ sinh viên" />
                                             </a>
                                         ) : (
-                                            <div className="staff-driver-approval__image-empty">No image</div>
+                                            <div className="staff-driver-approval__image-empty">Không có ảnh</div>
                                         )}
                                     </div>
                                     <div>
-                                        <span>Driver license image</span>
+                                        <span>Ảnh giấy phép lái xe</span>
                                         {driverDetail.driverLicenseImage ? (
                                             <a href={driverDetail.driverLicenseImage} target="_blank" rel="noreferrer">
-                                                <img src={driverDetail.driverLicenseImage} alt="Driver license" />
+                                                <img src={driverDetail.driverLicenseImage} alt="Ảnh giấy phép lái xe" />
                                             </a>
                                         ) : (
-                                            <div className="staff-driver-approval__image-empty">No image</div>
+                                            <div className="staff-driver-approval__image-empty">Không có ảnh</div>
                                         )}
                                     </div>
                                     <div>
-                                        <span>Vehicle registration image</span>
+                                        <span>Ảnh đăng ký phương tiện</span>
                                         {driverDetail.vehicleRegistrationImage ? (
                                             <a href={driverDetail.vehicleRegistrationImage} target="_blank" rel="noreferrer">
-                                                <img src={driverDetail.vehicleRegistrationImage} alt="Vehicle registration" />
+                                                <img src={driverDetail.vehicleRegistrationImage} alt="Ảnh đăng ký phương tiện" />
                                             </a>
                                         ) : (
-                                            <div className="staff-driver-approval__image-empty">No image</div>
+                                            <div className="staff-driver-approval__image-empty">Không có ảnh</div>
                                         )}
                                     </div>
                                 </div>
@@ -470,11 +470,11 @@ const StaffDriverApprovalManage = () => {
                                    
                                     <div>
                                         <FiCheckCircle />
-                                        <span>Chế độ tài xế: {driverDetail.isDriverModeEnabled ? 'Enabled' : 'Disabled'}</span>
+                                        <span>Chế độ tài xế: {driverDetail.isDriverModeEnabled ? 'Đã bật' : 'Đã tắt'}</span>
                                     </div>
                                     <div>
                                         <FiCheckCircle />
-                                        <span>Được duyệt bởi Staff ID: {driverDetail.approvedBySystemUserId ?? '-'}</span>
+                                        <span>Được duyệt bởi: {driverDetail.approvedBySystemUserId ?? '-'}</span>
                                     </div>
                                     <div>
                                         <FiCheckCircle />
@@ -486,7 +486,7 @@ const StaffDriverApprovalManage = () => {
                                     <input
                                         className="staff-driver-approval__reject-input"
                                         type="text"
-                                        placeholder="Nhập lý do từ chối driver..."
+                                        placeholder="Nhập lý do từ chối tài xế..."
                                         value={rejectReason}
                                         onChange={(e) => setRejectReason(e.target.value)}
                                     />
@@ -497,7 +497,7 @@ const StaffDriverApprovalManage = () => {
                                 <div className="staff-driver-approval__modal-actions">
                                     <button type="button" className="staff-driver-approval__reject-btn" onClick={handleReject} disabled={actionLoading || String(driverDetail.approvalStatus || '').toLowerCase() === 'approved'}>
                                         <FiX />
-                                        Reject
+                                        Từ chối
                                     </button>
                                     <button
                                         type="button"
@@ -506,7 +506,7 @@ const StaffDriverApprovalManage = () => {
                                         disabled={actionLoading || String(driverDetail.approvalStatus || '').toLowerCase() === 'approved'}
                                     >
                                         <FiCheckCircle />
-                                        {String(driverDetail.approvalStatus || '').toLowerCase() === 'approved' ? 'Approved' : 'Approve'}
+                                        {String(driverDetail.approvalStatus || '').toLowerCase() === 'approved' ? 'Đã duyệt' : 'Duyệt'}
                                     </button>
                                 </div>
                             </>
@@ -520,8 +520,8 @@ const StaffDriverApprovalManage = () => {
                     <div className="staff-driver-approval__modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
                         <div className="staff-driver-approval__modal-head">
                             <div>
-                                <p>Vehicle detail</p>
-                                <h3>Driver #{selectedVehicle}</h3>
+                                <p>Chi tiết phương tiện</p>
+                                <h3>Tài xế #{selectedVehicle}</h3>
                             </div>
                             <button type="button" className="staff-driver-approval__close" onClick={closeVehicle}>
                                 <FiX />
@@ -529,29 +529,29 @@ const StaffDriverApprovalManage = () => {
                         </div>
 
                         {vehicleLoading ? (
-                            <div className="staff-driver-approval__state">Đang tải vehicle...</div>
+                            <div className="staff-driver-approval__state">Đang tải phương tiện...</div>
                         ) : modalError ? (
                             <div className="staff-driver-approval__state staff-driver-approval__state--error">{modalError}</div>
                         ) : vehicleItems.length === 0 ? (
-                            <div className="staff-driver-approval__state">Không có vehicle nào.</div>
+                            <div className="staff-driver-approval__state">Không có phương tiện nào.</div>
                         ) : (
                             <div className="staff-driver-approval__vehicle-list">
                                 {vehicleItems.map((vehicle) => (
                                     <div key={vehicle.vehicleId} className="staff-driver-approval__vehicle-card">
                                         <div className="staff-driver-approval__vehicle-grid">
-                                            <div><span>Vehicle Type</span><strong>{vehicle.vehicleType || '-'}</strong></div>
-                                            <div><span>Brand</span><strong>{vehicle.brand || '-'}</strong></div>
+                                            <div><span>Loại phương tiện</span><strong>{vehicle.vehicleType || '-'}</strong></div>
+                                            <div><span>Hãng</span><strong>{vehicle.brand || '-'}</strong></div>
                                             <div><span>Model</span><strong>{vehicle.model || '-'}</strong></div>
-                                            <div><span>Color</span><strong>{vehicle.color || '-'}</strong></div>
-                                            <div><span>License Plate</span><strong>{vehicle.licensePlate || '-'}</strong></div>
-                                            <div><span>Status</span><strong>{vehicle.status || '-'}</strong></div>
-                                            <div><span>Vehicle Registration</span>
+                                            <div><span>Màu sắc</span><strong>{vehicle.color || '-'}</strong></div>
+                                            <div><span>Biển số</span><strong>{vehicle.licensePlate || '-'}</strong></div>
+                                            <div><span>Trạng thái</span><strong>{vehicle.status || '-'}</strong></div>
+                                            <div><span>Ảnh đăng ký phương tiện</span>
                                                 {vehicle.vehicleRegistrationImage ? (
                                                     <a href={vehicle.vehicleRegistrationImage} target="_blank" rel="noreferrer">
-                                                        <img src={vehicle.vehicleRegistrationImage} alt="Vehicle registration" />
+                                                        <img src={vehicle.vehicleRegistrationImage} alt="Ảnh đăng ký phương tiện" />
                                                     </a>
                                                 ) : (
-                                                    <div className="staff-driver-approval__image-empty">No image</div>
+                                                    <div className="staff-driver-approval__image-empty">Không có ảnh</div>
                                                 )}
                                             </div>
                                         </div>
@@ -562,7 +562,7 @@ const StaffDriverApprovalManage = () => {
                                             <input
                                                 className="staff-driver-approval__reject-input"
                                                 type="text"
-                                                placeholder="Nhập lý do từ chối vehicle..."
+                                                placeholder="Nhập lý do từ chối phương tiện..."
                                                 value={vehicleRejectReason}
                                                 onChange={(e) => setVehicleRejectReason(e.target.value)}
                                             />
@@ -571,7 +571,7 @@ const StaffDriverApprovalManage = () => {
                                         <div className="staff-driver-approval__modal-actions">
                                             <button type="button" className="staff-driver-approval__reject-btn" onClick={handleVehicleReject} disabled={vehicleActionLoading || String(vehicle.status || '').toLowerCase() === 'approved'}>
                                                 <FiX />
-                                                Reject Vehicle
+                                                Từ chối
                                             </button>
                                             <button
                                                 type="button"
@@ -579,7 +579,7 @@ const StaffDriverApprovalManage = () => {
                                                 onClick={() => handleVehicleApprove(vehicle.vehicleId)}
                                                 disabled={vehicleActionLoading || String(vehicle.status || '').toLowerCase() === 'approved'}
                                             >
-                                                {String(vehicle.status || '').toLowerCase() === 'approved' ? 'Approved' : (vehicleActionLoading ? 'Đang duyệt...' : 'Approve Vehicle')}
+                                                {String(vehicle.status || '').toLowerCase() === 'approved' ? 'Đã duyệt' : (vehicleActionLoading ? 'Đang duyệt...' : 'Duyệt phương tiện')}
                                             </button>
                                         </div>
                                     </div>
@@ -593,8 +593,8 @@ const StaffDriverApprovalManage = () => {
             {confirmRejectOpen ? (
                 <div className="staff-driver-approval__confirm-backdrop" role="presentation" onClick={() => setConfirmRejectOpen(false)}>
                     <div className="staff-driver-approval__confirm-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-                        <h3>Xác nhận từ chối driver</h3>
-                        <p>Bạn có chắc chắn muốn từ chối driver này không?</p>
+                        <h3>Xác nhận từ chối tài xế</h3>
+                        <p>Bạn có chắc chắn muốn từ chối tài xế này không?</p>
                         <input
                             className="staff-driver-approval__confirm-input"
                             type="text"
@@ -617,8 +617,8 @@ const StaffDriverApprovalManage = () => {
             {vehicleRejectOpen ? (
                 <div className="staff-driver-approval__confirm-backdrop" role="presentation" onClick={() => setVehicleRejectOpen(false)}>
                     <div className="staff-driver-approval__confirm-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-                        <h3>Xác nhận từ chối vehicle</h3>
-                        <p>Bạn có chắc chắn muốn từ chối vehicle này không?</p>
+                        <h3>Xác nhận từ chối phương tiện</h3>
+                        <p>Bạn có chắc chắn muốn từ chối phương tiện này không?</p>
                         <input
                             className="staff-driver-approval__confirm-input"
                             type="text"

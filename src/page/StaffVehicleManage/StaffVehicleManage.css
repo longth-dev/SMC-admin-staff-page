@@ -1,0 +1,570 @@
+.staff-vehicle-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+        linear-gradient(180deg, #f8fbff 0%, #f5f7fb 100%);
+    color: #1f2937;
+}
+
+.staff-vehicle-page__content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+.staff-vehicle-page__topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+
+.staff-vehicle-page__topbar h1 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.staff-vehicle-page__topbar p {
+    margin: 10px 0 0;
+    color: #64748b;
+    font-size: 15px;
+}
+
+.staff-vehicle-page__toolbar {
+    display: grid;
+    grid-template-columns: 2fr repeat(2, minmax(160px, 1fr)) auto;
+    gap: 12px;
+    margin: 22px 0;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.staff-vehicle-page__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid #dbe3f0;
+    border-radius: 14px;
+    padding: 0 14px;
+    height: 48px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.staff-vehicle-page__search input,
+.staff-vehicle-page__toolbar select {
+    width: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #1f2937;
+}
+
+.staff-vehicle-page__toolbar select,
+.staff-vehicle-page__filter-btn,
+.staff-vehicle-page__detail-btn,
+.staff-vehicle-modal__close,
+.staff-vehicle-modal__view-full {
+    border: 1px solid #dbe3f0;
+    border-radius: 12px;
+    background: #fff;
+}
+
+
+.staff-vehicle-page__toolbar select {
+    height: 48px;
+    padding: 0 12px;
+}
+
+.staff-vehicle-page__filter-btn,
+.staff-vehicle-page__detail-btn {
+    height: 44px;
+    padding: 0 14px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.staff-vehicle-page__detail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    color: #1d4ed8;
+    border-color: #cfe0ff;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.08);
+    min-width: 112px;
+}
+
+.staff-vehicle-page__detail-btn:hover {
+    background: linear-gradient(180deg, #eff6ff, #eaf2ff);
+    border-color: #a9c7ff;
+    box-shadow: 0 14px 24px rgba(37, 99, 235, 0.14);
+}
+
+.staff-vehicle-page__filter-btn:hover,
+.staff-vehicle-page__detail-btn:hover,
+.staff-vehicle-modal__view-full:hover {
+    transform: translateY(-1px);
+}
+
+.staff-vehicle-page__filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #3b82f6, #2563eb);
+    color: #fff;
+    border-color: #2563eb;
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.18);
+}
+
+.staff-vehicle-page__table-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.staff-vehicle-page__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.staff-vehicle-page__table th,
+.staff-vehicle-page__table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #eef2f7;
+    text-align: left;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.staff-vehicle-page__table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.staff-vehicle-page__table th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+}
+
+.staff-vehicle-page__empty-row,
+.staff-vehicle-page__state {
+    padding: 28px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.staff-vehicle-page__state--error {
+    color: #b91c1c;
+}
+
+.staff-vehicle-page__table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+}
+
+.staff-vehicle-page__pager {
+    display: flex;
+    gap: 8px;
+}
+
+.staff-vehicle-page__pager button {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #dbe3f0;
+    background: #fff;
+}
+
+.staff-vehicle-page__pager-active {
+    background: #2563eb !important;
+    color: #fff;
+    border-color: #2563eb !important;
+}
+
+.staff-vehicle-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.52);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+}
+
+.staff-vehicle-modal {
+    width: min(760px, 96vw);
+    max-height: calc(100vh - 48px);
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.24);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.staff-vehicle-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 20px 12px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.staff-vehicle-modal__header h2,
+.staff-vehicle-modal__section h3 {
+    margin: 0;
+}
+
+.staff-vehicle-modal__header p {
+    margin: 0 0 8px;
+    color: #6b7280;
+}
+
+.staff-vehicle-modal__close {
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+}
+
+.staff-vehicle-modal__body {
+    padding: 20px;
+    overflow: auto;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.staff-vehicle-modal__header-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #f8fbff;
+    border: 1px solid #e8eef8;
+}
+
+.staff-vehicle-modal__plate-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid #dbe3f0;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #1f2937;
+    background: #fff;
+}
+
+.staff-vehicle-modal__status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    background: #ecfdf3;
+    color: #166534;
+}
+
+.staff-vehicle-modal__section {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.staff-vehicle-modal__section h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.staff-vehicle-modal__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.staff-vehicle-modal__grid div span {
+    display: block;
+    color: #6b7280;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.staff-vehicle-modal__grid div strong,
+.staff-vehicle-modal__section--note p {
+    font-size: 14px;
+}
+
+.staff-vehicle-modal__section--gallery img {
+    width: 100%;
+    display: block;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+.staff-vehicle-modal__gallery-single {
+    border: 1px solid #dbe3f0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f8fafc;
+    min-height: 220px;
+    margin-bottom: 12px;
+}
+
+.staff-vehicle-modal__gallery-single img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.staff-vehicle-modal__view-full {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #dbe3f0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 700;
+    background: #f8fbff;
+}
+
+.staff-vehicle-modal__approval-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.staff-vehicle-modal__approval-box span {
+    font-size: 13px;
+    color: #15803d;
+}
+
+.staff-vehicle-modal__section--trips p {
+    margin: 0;
+    color: #64748b;
+}
+
+.staff-vehicle-modal__section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.staff-vehicle-modal__section-head p {
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.staff-vehicle-modal__trip-count {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.staff-vehicle-modal__trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.staff-vehicle-modal__trip-item {
+    border: 1px solid #dbe3f0;
+    border-radius: 18px;
+    padding: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.staff-vehicle-modal__trip-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.staff-vehicle-modal__trip-item-left {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.staff-vehicle-modal__trip-badge {
+    flex: 0 0 auto;
+    min-width: 54px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #1d4ed8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.staff-vehicle-modal__trip-title {
+    display: block;
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.staff-vehicle-modal__trip-meta {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.staff-vehicle-modal__trip-status {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+.staff-vehicle-modal__trip-route {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+}
+
+.staff-vehicle-modal__trip-point span,
+.staff-vehicle-modal__trip-footer span {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.staff-vehicle-modal__trip-point strong,
+.staff-vehicle-modal__trip-footer strong {
+    font-size: 13px;
+    color: #1f2937;
+}
+
+.staff-vehicle-modal__trip-arrow {
+    color: #94a3b8;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.staff-vehicle-modal__trip-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.staff-vehicle-modal__trip-empty {
+    padding: 18px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.staff-vehicle-modal__trip-empty strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #0f172a;
+}
+
+.staff-vehicle-modal__trip-empty p {
+    margin: 0;
+    color: #64748b;
+}
+
+@media (max-width: 1100px) {
+    .staff-vehicle-page__toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .staff-vehicle-page__table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 720px) {
+    .staff-vehicle-page__content {
+        padding: 16px;
+    }
+
+    .staff-vehicle-modal {
+        width: 100%;
+        max-height: calc(100vh - 32px);
+        border-radius: 18px;
+    }
+
+    .staff-vehicle-modal__header-card,
+    .staff-vehicle-modal__gallery {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .staff-vehicle-modal__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-vehicle-modal__section-head,
+    .staff-vehicle-modal__trip-item-top,
+    .staff-vehicle-modal__trip-route,
+    .staff-vehicle-modal__trip-footer {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+
+    .staff-vehicle-modal__trip-route {
+        text-align: left;
+    }
+
+    .staff-vehicle-page__table-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

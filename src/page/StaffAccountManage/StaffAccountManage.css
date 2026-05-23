@@ -14,16 +14,95 @@
 
 .staff-account__panel {
   min-height: 100%;
+  min-width: 0;
 }
 
-.staff-account__panel--table {
+.staff-account .admin-account__panel:first-child {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__panel-head {
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__panel-head h3 {
+  font-size: 1.05rem;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__panel-head p {
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__role-list {
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__role-head {
+  margin-bottom: 6px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__progress {
+  height: 8px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__staff-list {
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__staff-item {
+  padding: 12px 14px;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__user-cell {
+  min-width: 0;
+  flex: 1 1 auto;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__user-cell > div:last-child {
+  min-width: 0;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__user-cell p,
+.staff-account .admin-account__panel:first-child .admin-account__user-cell span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  margin: 0;
+}
+
+.staff-account .admin-account__panel:first-child .admin-account__badge {
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.staff-account .admin-account__panel--table {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
 .staff-account__search {
-  max-width: 360px;
+  width: min(100%, 360px);
 }
 
 .staff-account__action-btn {
@@ -68,5 +147,9 @@
   .staff-account__action-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .staff-account .admin-account__table {
+    min-width: 720px;
   }
 }

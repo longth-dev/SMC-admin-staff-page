@@ -15,6 +15,9 @@ import StaffHandleIncident from '../page/StaffHandleIncident/StaffHandleIncident
 import StaffAccountManage from '../page/StaffAccountManage/StaffAccountManage';
 import StaffReview from '../page/StaffReivew/StaffReview';
 import AdminPointPolicy from '../page/AdminPointPolicy/AdminPointPolicy';
+import AdminBookingManage from '../page/AdminBookingManage/AdminBookingManage';
+import StaffBookingManage from '../page/StaffBookingManage/StaffBookingManage';
+import StaffVehicleManage from '../page/StaffVehicleManage/StaffVehicleManage';
 
 const Placeholder = ({ title }) => <div style={{ padding: 24 }}>{title}</div>;
 
@@ -27,6 +30,7 @@ const AppRouter = () => (
       <Route element={<ProtectedRoutesAdmin />}>
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route path="accounts" element={<AdminAccountManage />} />
+          <Route path="bookings" element={<AdminBookingManage />} />
           <Route path="vouchers" element={<AdminVoucherManage />} />
           <Route path="notifications" element={<AdminNotificationManage />} />
           <Route path="statistics" element={<AdminStatistic />} />
@@ -39,6 +43,8 @@ const AppRouter = () => (
       <Route element={<ProtectedRoutesStaff />}>
         <Route path="/staff" element={<LayoutStaff />}>
           <Route path="drivers" element={<StaffDriverApprovalManage />} />
+          <Route path="bookings" element={<StaffBookingManage />} />
+          <Route path="vehicles" element={<StaffVehicleManage />} />
           <Route path="complaints" element={<StaffHandleIncident />} />
           <Route path="reviews" element={<StaffReview />} />
           <Route path="accounts" element={<StaffAccountManage />} />

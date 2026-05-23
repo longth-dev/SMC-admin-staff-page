@@ -5,12 +5,13 @@ import {
     FiDollarSign,
     FiClipboard,
     FiMap,
+    FiMapPin,
     FiTruck,
     FiAlertTriangle,
     FiFileText,
-    FiSettings,
     FiLogOut,
     FiMessageSquare,
+    FiTool,
 } from 'react-icons/fi';
 import logo from '../../assets/smc.png';
 import './SideBar.css';
@@ -20,22 +21,24 @@ const ROLE_CLAIM_ALT = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/
 
 const adminMenu = [
     { label: 'Thống kê doanh thu', to: '/admin/statistics', icon: FiFileText, end: true },
-    { label: 'Quản lý account', to: '/admin/accounts', icon: FiUsers },
+    { label: 'Quản lý tài khoản', to: '/admin/accounts', icon: FiUsers },
+    { label: 'Quản lý cuốc xe', to: '/admin/bookings', icon: FiMapPin },
     { label: 'Quản lý voucher', to: '/admin/vouchers', icon: FiDollarSign },
-    { label: 'Point Policy', to: '/admin/point-policy', icon: FiClipboard },
+    { label: 'Quản lý đổi điểm', to: '/admin/point-policy', icon: FiClipboard },
     { label: 'Quản lý thông báo', to: '/admin/notifications', icon: FiBell },
     { label: 'Phân tích heatmap', to: '/admin/heatmap', icon: FiMap },
 ];
 
 const staffMenu = [
-    { label: 'Duyệt Driver', to: '/staff/drivers', icon: FiTruck, end: true },
+    { label: 'Duyệt hồ sơ tài xế', to: '/staff/drivers', icon: FiTruck, end: true },
+    { label: 'Quản lý cuốc xe', to: '/staff/bookings', icon: FiMapPin },
     { label: 'Xử lý khiếu nại và bồi thường', to: '/staff/complaints', icon: FiAlertTriangle },
-    { label: 'Quản lý review', to: '/staff/reviews', icon: FiMessageSquare },
+    { label: 'Quản lý đánh giá', to: '/staff/reviews', icon: FiMessageSquare },
+    { label: 'Quản lý phương tiện', to: '/staff/vehicles', icon: FiTool },
     { label: 'Xử lý rút tiền', to: '/staff/withdrawals', icon: FiDollarSign },
-    { label: 'Quản lý account', to: '/staff/accounts', icon: FiUsers },
+    { label: 'Quản lý tài khoản', to: '/staff/accounts', icon: FiUsers },
 ];
 
-const footerMenu = [{ label: 'Settings', to: '/admin/settings', icon: FiSettings }];
 
 const getLinkClass = ({ isActive }) => `sidebar__item ${isActive ? 'sidebar__item--active' : ''}`;
 
@@ -129,20 +132,9 @@ const SideBar = () => {
             {(isAdmin || isStaff) ? <div className="sidebar__divider" /> : null}
 
             <div className="sidebar__bottom">
-                {footerMenu.map((item) => {
-                    const Icon = item.icon;
-
-                    return (
-                        <NavLink key={item.label} to={item.to} className={getLinkClass}>
-                            <Icon className="sidebar__icon" aria-hidden="true" />
-                            <span className="sidebar__label">{item.label}</span>
-                        </NavLink>
-                    );
-                })}
-
                 <button type="button" className="sidebar__item" onClick={handleLogout}>
                     <FiLogOut className="sidebar__icon" aria-hidden="true" />
-                    <span className="sidebar__label">Logout</span>
+                    <span className="sidebar__label">Đăng xuất</span>
                 </button>
             </div>
         </aside>

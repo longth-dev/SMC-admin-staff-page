@@ -9,10 +9,10 @@ import './StaffHandleWithdraw.css';
 const NAME_ID_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
 
 const STATUS_FILTERS = [
-    { value: 'all', label: 'All' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'approved', label: 'Approved' },
-    { value: 'rejected', label: 'Rejected' },
+    { value: 'all', label: 'Tất cả' },
+    { value: 'pending', label: 'Đang chờ' },
+    { value: 'approved', label: 'Đã duyệt' },
+    { value: 'rejected', label: 'Đã từ chối' },
 ];
 
 const formatDateTime = (value) => {
@@ -30,7 +30,7 @@ const formatDateTime = (value) => {
 const formatMoney = (value) => {
     const amount = Number(value ?? 0);
     return new Intl.NumberFormat('vi-VN', {
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
     }).format(amount) + ' point';
 };
 
@@ -60,7 +60,7 @@ const StaffHandleWithdraw = () => {
             const rawId = decoded[NAME_ID_CLAIM] || decoded.nameid || decoded.systemUserId || decoded.userId;
             return Number(rawId) || 0;
         } catch (e) {
-            console.error('Cannot decode token', e);
+            console.error('Không thể giải mã token', e);
             return 0;
         }
     }, []);
@@ -217,9 +217,9 @@ const StaffHandleWithdraw = () => {
         <div className="staff-withdraw-page">
             <div className="staff-withdraw-page__header">
                 <div>
-                    <p className="staff-withdraw-page__eyebrow">Staff workspace</p>
-                    <h2>Withdrawal Processing</h2>
-                    <p>Manage driver payout requests and review flagged transactions.</p>
+                    <p className="staff-withdraw-page__eyebrow">Khu vực nhân viên</p>
+                    <h2>Xử lý yêu cầu rút tiền</h2>
+                    <p>Quản lý các yêu cầu rút tiền của tài xế và xem các giao dịch được đánh dấu cần kiểm tra.</p>
                 </div>
 
                 <div className="staff-withdraw-page__filters">
@@ -229,7 +229,7 @@ const StaffHandleWithdraw = () => {
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Tìm theo ID, wallet, amount, status..."
+                            placeholder="Tìm theo mã, ví, số tiền, trạng thái..."
                         />
                     </div>
 
@@ -250,15 +250,15 @@ const StaffHandleWithdraw = () => {
 
             <div className="staff-withdraw-page__summary-grid">
                 <div className="staff-withdraw-page__summary-card">
-                    <span>Pending Requests</span>
+                    <span>Yêu cầu đang chờ</span>
                     <strong>{withdrawals.filter((item) => String(item.status || '').toLowerCase() === 'pending').length}</strong>
                 </div>
                 <div className="staff-withdraw-page__summary-card">
-                    <span>Total Processed Today</span>
+                    <span>Tổng đã xử lý hôm nay</span>
                     <strong>{formatMoney(withdrawals.filter((item) => String(item.status || '').toLowerCase() === 'approved').reduce((sum, item) => sum + Number(item.amount || 0), 0))}</strong>
                 </div>
                 <div className="staff-withdraw-page__summary-card">
-                    <span>Flagged for Review</span>
+                    <span>Đánh dấu cần xem xét</span>
                     <strong>{withdrawals.filter((item) => String(item.status || '').toLowerCase() === 'rejected').length}</strong>
                 </div>
             </div>
@@ -273,12 +273,12 @@ const StaffHandleWithdraw = () => {
                         <table className="staff-withdraw-page__table">
                             <thead>
                                 <tr>
-                                    <th>Withdraw ID</th>
-                                    <th>Wallet ID</th>
-                                    <th className="staff-withdraw-page__align-right">Amount</th>
-                                    <th>Created At</th>
-                                    <th>Status</th>
-                                    <th className="staff-withdraw-page__actions-head">Actions</th>
+                                    <th>Mã rút tiền</th>
+                                    <th>Mã ví</th>
+                                    <th className="staff-withdraw-page__align-right">Số tiền</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th className="staff-withdraw-page__actions-head">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -295,14 +295,14 @@ const StaffHandleWithdraw = () => {
                                             <td>{formatDateTime(item.createdAt)}</td>
                                             <td>
                                                 <span className={`staff-withdraw-page__status staff-withdraw-page__status--${getStatusClass(item.status)}`}>
-                                                    {item.status || 'Pending'}
+                                                    {item.status || 'Đang chờ'}
                                                 </span>
                                             </td>
                                             <td>
                                                 <div className="staff-withdraw-page__actions">
                                                     <button type="button" className="staff-withdraw-page__icon-btn" onClick={() => openDetail(item.withdrawRequestId)}>
                                                         <FiFileText />
-                                                        Details
+                                                        Chi tiết
                                                     </button>
                                                 </div>
                                             </td>
@@ -320,7 +320,7 @@ const StaffHandleWithdraw = () => {
                     <div className="staff-withdraw-page__modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
                         <div className="staff-withdraw-page__modal-head">
                             <div>
-                                <p>Withdrawal detail</p>
+                                <p>Chi tiết yêu cầu rút tiền</p>
                                 <h3>#{selectedWithdrawId}</h3>
                             </div>
                             <button type="button" className="staff-withdraw-page__close" onClick={closeDetail}>
@@ -336,27 +336,27 @@ const StaffHandleWithdraw = () => {
                             <>
                                 <div className="staff-withdraw-page__detail-grid">
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Wallet ID</span>
+                                        <span>Mã ví</span>
                                         <strong>{detail.walletId}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Amount</span>
+                                        <span>Số tiền</span>
                                         <strong>{formatMoney(detail.amount)}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Status</span>
+                                        <span>Trạng thái</span>
                                         <strong>{detail.status || '-'}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Created At</span>
+                                        <span>Ngày tạo</span>
                                         <strong>{formatDateTime(detail.createdAt)}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Bank Name</span>
+                                        <span>Tên ngân hàng</span>
                                         <strong>{detail.bankName || '-'}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
-                                        <span>Bank Account</span>
+                                        <span>Số tài khoản ngân hàng</span>
                                         <strong>{detail.bankAccount || '-'}</strong>
                                     </div>
                                 </div>
@@ -364,16 +364,16 @@ const StaffHandleWithdraw = () => {
                                 <div className="staff-withdraw-page__detail-meta">
                                     <div>
                                         <FiClock />
-                                        <span>Approved At: {formatDateTime(detail.approvedAt)}</span>
+                                        <span>Ngày duyệt: {formatDateTime(detail.approvedAt)}</span>
                                     </div>
                                     <div>
                                         <FiCheckCircle />
-                                        <span>Approved By: {detail.approvedBySystemUserId || '-'}</span>
+                                        <span>Người duyệt: {detail.approvedBySystemUserId || '-'}</span>
                                     </div>
                                 </div>
 
                                 <div className="staff-withdraw-page__upload-section">
-                                    <span>Transfer Proof Image</span>
+                                    <span>Ảnh chứng minh chuyển khoản</span>
                                     <input
                                         className="staff-withdraw-page__file-input"
                                         type="file"
@@ -383,7 +383,7 @@ const StaffHandleWithdraw = () => {
 
                                     {transferProofPreview ? (
                                         <div className="staff-withdraw-page__file-preview">
-                                            <img src={transferProofPreview} alt="Selected proof preview" />
+                                            <img src={transferProofPreview} alt="Ảnh xem trước chứng từ" />
                                             <div className="staff-withdraw-page__file-preview-actions">
                                                 <p className="staff-withdraw-page__file-name">{transferProofImage?.name}</p>
                                                 <button type="button" className="staff-withdraw-page__file-remove" onClick={clearProofImage}>
@@ -397,11 +397,11 @@ const StaffHandleWithdraw = () => {
                                 <div className="staff-withdraw-page__modal-actions">
                                     <button type="button" className="staff-withdraw-page__reject-btn" onClick={handleReject} disabled={actionLoading}>
                                         <FiX />
-                                        Reject
+Từ chối
                                     </button>
                                     <button type="button" className="staff-withdraw-page__approve-btn" onClick={handleApprove} disabled={actionLoading}>
                                         <FiCheckCircle />
-                                        Approve
+Duyệt
                                     </button>
                                 </div>
                             </>

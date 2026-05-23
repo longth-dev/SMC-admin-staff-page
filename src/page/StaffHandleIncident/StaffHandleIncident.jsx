@@ -6,10 +6,10 @@ import AxiosSetup from '../../services/AxiosSetup';
 import './StaffHandleIncident.css';
 
 const STATUS_FILTERS = [
-    { value: 'all', label: 'All' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'resolved', label: 'Resolved' },
-    { value: 'rejected', label: 'Rejected' },
+    { value: 'all', label: 'Tất cả' },
+    { value: 'pending', label: 'Đang chờ' },
+    { value: 'resolved', label: 'Đã xử lý' },
+    { value: 'rejected', label: 'Đã từ chối' },
 ];
 
 const formatDateTime = (value) => {
@@ -40,6 +40,7 @@ const StaffHandleIncident = () => {
     const [resolutionNote, setResolutionNote] = useState('');
     const [confirmAction, setConfirmAction] = useState('');
 
+    const isFinalStatus = String(incidentDetail?.status || '').toLowerCase() === 'resolved' || String(incidentDetail?.status || '').toLowerCase() === 'rejected';
 
     const fetchIncidents = useCallback(async () => {
         try {
@@ -150,9 +151,9 @@ const StaffHandleIncident = () => {
         <div className="staff-incident-page">
             <div className="staff-incident-page__header">
                 <div>
-                    <p className="staff-incident-page__eyebrow">Staff workspace</p>
-                    <h2>Incident Control</h2>
-                    <p>Real-time monitoring and resolution tracking for fleet anomalies and vehicular accidents.</p>
+                    <p className="staff-incident-page__eyebrow">Khu vực nhân viên</p>
+                    <h2>Quản lý sự cố</h2>
+                    <p>Theo dõi và xử lý các sự cố bất thường của phương tiện theo thời gian thực.</p>
                 </div>
 
                 <div className="staff-incident-page__filters">
@@ -162,7 +163,7 @@ const StaffHandleIncident = () => {
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Tìm theo ID, type, student, status..."
+                            placeholder="Tìm theo mã, loại, sinh viên, trạng thái..."
                         />
                     </div>
 
@@ -183,15 +184,15 @@ const StaffHandleIncident = () => {
 
             <div className="staff-incident-page__summary-grid">
                 <div className="staff-incident-page__summary-card">
-                    <span>Pending Investigations</span>
+                    <span>Sự cố đang chờ</span>
                     <strong>{incidents.filter((item) => String(item.status || '').toLowerCase() === 'pending').length}</strong>
                 </div>
                 <div className="staff-incident-page__summary-card">
-                    <span>Resolved</span>
+                    <span>Đã xử lý</span>
                     <strong>{incidents.filter((item) => String(item.status || '').toLowerCase() === 'resolved').length}</strong>
                 </div>
                 <div className="staff-incident-page__summary-card">
-                    <span>Rejected</span>
+                    <span>Đã từ chối</span>
                     <strong>{incidents.filter((item) => String(item.status || '').toLowerCase() === 'rejected').length}</strong>
                 </div>
             </div>
@@ -206,12 +207,12 @@ const StaffHandleIncident = () => {
                         <table className="staff-incident-page__table">
                             <thead>
                                 <tr>
-                                    <th>Incident ID</th>
-                                    <th>Type &amp; Student</th>
-                                    <th>Description</th>
-                                    <th>Created At</th>
-                                    <th>Status</th>
-                                    <th className="staff-incident-page__actions-head">Actions</th>
+                                    <th>Mã sự cố</th>
+                                    <th>Loại &amp; sinh viên</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th className="staff-incident-page__actions-head">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -226,7 +227,7 @@ const StaffHandleIncident = () => {
                                             <td>
                                                 <div className="staff-incident-page__type-block">
                                                     <strong>{item.incidentType || '-'}</strong>
-                                                    <span>{item.reportedByStudentName || '-'} • Student #{item.reportedByStudentId}</span>
+                                                    <span>{item.reportedByStudentName || '-'}</span>
                                                 </div>
                                             </td>
                                             <td>{item.description || '-'}</td>
@@ -240,7 +241,7 @@ const StaffHandleIncident = () => {
                                                 <div className="staff-incident-page__actions">
                                                     <button type="button" className="staff-incident-page__icon-btn" onClick={() => openDetail(item.incidentId)}>
                                                         <FiFileText />
-                                                        View Detail
+                                                        Xem chi tiết
                                                     </button>
                                                 </div>
                                             </td>
@@ -258,7 +259,7 @@ const StaffHandleIncident = () => {
                     <div className="staff-incident-page__modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
                         <div className="staff-incident-page__modal-head">
                             <div>
-                                <p>Incident detail</p>
+                                <p>Chi tiết sự cố</p>
                                 <h3>#{selectedIncidentId}</h3>
                             </div>
                             <button type="button" className="staff-incident-page__close" onClick={closeDetail}>
@@ -274,106 +275,106 @@ const StaffHandleIncident = () => {
                             <>
                                 <div className="staff-incident-page__detail-grid">
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Incident Type</span>
+                                        <span>Loại sự cố</span>
                                         <strong>{incidentDetail.incidentType || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Status</span>
+                                        <span>Trạng thái</span>
                                         <strong>{incidentDetail.status || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Trip ID</span>
+                                        <span>Mã chuyến</span>
                                         <strong>{incidentDetail.tripId || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Trip Status</span>
+                                        <span>Trạng thái chuyến</span>
                                         <strong>{incidentDetail.tripStatus || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Reported By</span>
+                                        <span>Người báo cáo</span>
                                         <strong>{incidentDetail.reportedByStudentName || '-'}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Created At</span>
+                                        <span>Ngày tạo</span>
                                         <strong>{formatDateTime(incidentDetail.createdAt)}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Resolved At</span>
+                                        <span>Ngày xử lý</span>
                                         <strong>{formatDateTime(incidentDetail.resolvedAt)}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
-                                        <span>Resolved By</span>
+                                        <span>Người xử lý</span>
                                         <strong>{incidentDetail.resolvedBySystemUserId || '-'}</strong>
                                     </div>
                                 </div>
 
                                 <div className="staff-incident-page__detail-description">
-                                    <span>Description</span>
-                                    <p>{incidentDetail.description || 'No description provided.'}</p>
+                                    <span>Mô tả</span>
+                                    <p>{incidentDetail.description || 'Không có mô tả.'}</p>
                                 </div>
 
                                 <div className="staff-incident-page__person-panels">
                                     <div className="staff-incident-page__person-panel">
                                         <div className="staff-incident-page__person-panel-head">
                                             <FiUser />
-                                            <span>Driver</span>
+                                            <span>Tài xế</span>
                                         </div>
                                         {incidentDetail.driver ? (
                                             <div className="staff-incident-page__person-card">
                                                 <strong>{incidentDetail.driver.fullName || '-'}</strong>
-                                                <span>Profile ID: {incidentDetail.driver.driverProfileId || '-'}</span>
-                                                <span>Student ID: {incidentDetail.driver.studentId || '-'}</span>
+                                                <span>Mã hồ sơ: {incidentDetail.driver.driverProfileId || '-'}</span>
+                                                <span>Mã sinh viên: {incidentDetail.driver.studentId || '-'}</span>
                                                 <span>Email: {incidentDetail.driver.email || '-'}</span>
-                                                <span>Phone: {incidentDetail.driver.phoneNumber || '-'}</span>
+                                                <span>Số điện thoại: {incidentDetail.driver.phoneNumber || '-'}</span>
                                             </div>
                                         ) : (
-                                            <div className="staff-incident-page__image-empty">No driver info</div>
+                                            <div className="staff-incident-page__image-empty">Không có thông tin tài xế</div>
                                         )}
                                     </div>
 
                                     <div className="staff-incident-page__person-panel">
                                         <div className="staff-incident-page__person-panel-head">
                                             <FiUsers />
-                                            <span>Passengers</span>
+                                            <span>Hành khách</span>
                                         </div>
                                         {Array.isArray(incidentDetail.passengers) && incidentDetail.passengers.length > 0 ? (
                                             <div className="staff-incident-page__passenger-list">
                                                 {incidentDetail.passengers.map((passenger) => (
                                                     <div key={passenger.bookingId} className="staff-incident-page__passenger-card">
                                                         <strong>{passenger.fullName || '-'}</strong>
-                                                        <span>Booking ID: {passenger.bookingId || '-'}</span>
-                                                        <span>Student ID: {passenger.studentId || '-'}</span>
-                                                        <span>Status: {passenger.bookingStatus || '-'}</span>
-                                                        <span>Final Price: {passenger.finalPricePoint ?? '-'}</span>
+                                                        <span>Mã booking: {passenger.bookingId || '-'}</span>
+                                                        <span>Mã sinh viên: {passenger.studentId || '-'}</span>
+                                                        <span>Trạng thái: {passenger.bookingStatus || '-'}</span>
+                                                        <span>Giá cuối: {passenger.finalPricePoint ?? '-'}</span>
                                                     </div>
                                                 ))}
                                             </div>
                                         ) : (
-                                            <div className="staff-incident-page__image-empty">No passengers</div>
+                                            <div className="staff-incident-page__image-empty">Không có hành khách</div>
                                         )}
                                     </div>
                                 </div>
 
                                 <div className="staff-incident-page__media-grid">
                                     <div>
-                                        <span>Photo Evidence</span>
+                                        <span>Ảnh bằng chứng</span>
                                         {incidentDetail.photoEvidenceUrl ? (
                                             <a href={incidentDetail.photoEvidenceUrl} target="_blank" rel="noreferrer">
-                                                <img src={incidentDetail.photoEvidenceUrl} alt="Incident evidence" />
+                                                <img src={incidentDetail.photoEvidenceUrl} alt="Bằng chứng sự cố" />
                                             </a>
                                         ) : (
-                                            <div className="staff-incident-page__image-empty">No image</div>
+                                            <div className="staff-incident-page__image-empty">Không có ảnh</div>
                                         )}
                                     </div>
                                     <div>
-                                        <span>Video Evidence</span>
+                                        <span>Video bằng chứng</span>
                                         {incidentDetail.videoEvidenceUrl ? (
                                             <video className="staff-incident-page__video" controls preload="metadata">
                                                 <source src={incidentDetail.videoEvidenceUrl} />
                                                 Trình duyệt của bạn không hỗ trợ video.
                                             </video>
                                         ) : (
-                                            <div className="staff-incident-page__image-empty">No video</div>
+                                            <div className="staff-incident-page__image-empty">Không có video</div>
                                         )}
                                     </div>
                                 </div>
@@ -381,12 +382,12 @@ const StaffHandleIncident = () => {
                                 <div className="staff-incident-page__detail-meta">
                                     <div>
                                         <FiClock />
-                                        <span>Resolution Note: {incidentDetail.resolutionNote || '-'}</span>
+                                        <span>Ghi chú xử lý: {incidentDetail.resolutionNote || '-'}</span>
                                     </div>
                                 </div>
 
                                 <div className="staff-incident-page__note-box">
-                                    <label htmlFor="incident-resolution-note">Resolution note</label>
+                                    <label htmlFor="incident-resolution-note">Ghi chú xử lý</label>
                                     <textarea
                                         id="incident-resolution-note"
                                         value={resolutionNote}
@@ -397,13 +398,13 @@ const StaffHandleIncident = () => {
                                 </div>
 
                                 <div className="staff-incident-page__modal-actions">
-                                    <button type="button" className="staff-incident-page__reject-btn" onClick={askReject} disabled={actionLoading}>
+                                    <button type="button" className="staff-incident-page__reject-btn" onClick={askReject} disabled={actionLoading || isFinalStatus}>
                                         <FiX />
-                                        Reject
+                                        Từ chối
                                     </button>
-                                    <button type="button" className="staff-incident-page__resolve-btn" onClick={askResolve} disabled={actionLoading}>
+                                    <button type="button" className="staff-incident-page__resolve-btn" onClick={askResolve} disabled={actionLoading || isFinalStatus}>
                                         <FiCheckCircle />
-                                        Resolved
+                                        Đã xử lý
                                     </button>
                                 </div>
                             </>
@@ -418,8 +419,8 @@ const StaffHandleIncident = () => {
                         <h3>{confirmAction === 'resolve' ? 'Xác nhận xử lý sự cố' : 'Xác nhận từ chối sự cố'}</h3>
                         <p>
                             {confirmAction === 'resolve'
-                                ? 'Bạn có chắc chắn muốn đánh dấu sự cố này là Resolved không?'
-                                : 'Bạn có chắc chắn muốn đánh dấu sự cố này là Rejected không?'}
+                                ? 'Bạn có chắc chắn muốn đánh dấu sự cố này là đã xử lý không?'
+                                : 'Bạn có chắc chắn muốn đánh dấu sự cố này là đã từ chối không?'}
                         </p>
                         <div className="staff-incident-page__confirm-actions">
                             <button type="button" className="staff-incident-page__confirm-cancel" onClick={() => setConfirmAction('')}>

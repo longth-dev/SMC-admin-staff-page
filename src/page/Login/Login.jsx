@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import AxiosSetup from '../../services/AxiosSetup';
 import './Login.css';
 
@@ -9,6 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -78,13 +80,21 @@ const Login = () => {
                         <input
                             id="password"
                             className="login-form__input login-form__input--password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             autoComplete="current-password"
                             required
                         />
+                        <button
+                            type="button"
+                            className="login-form__password-toggle"
+                            onClick={() => setShowPassword((current) => !current)}
+                            aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                        >
+                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                        </button>
                     </div>
 
                     <label className="login-form__checkbox">

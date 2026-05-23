@@ -40,7 +40,7 @@ const AdminPointPolicy = () => {
             const rawId = decoded[NAME_ID_CLAIM] || decoded.nameid || decoded.systemUserId || decoded.userId;
             return Number(rawId) || 0;
         } catch (e) {
-            console.error('Cannot decode token', e);
+            console.error('Không thể giải mã token', e);
             return 0;
         }
     }, []);
@@ -53,7 +53,7 @@ const AdminPointPolicy = () => {
             setPolicies(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             console.error(e);
-            setError('Không thể tải danh sách point policy.');
+            setError('Không thể tải danh sách chính sách điểm.');
         } finally {
             setLoading(false);
         }
@@ -108,17 +108,17 @@ const AdminPointPolicy = () => {
 
             if (editingPolicy) {
                 await AxiosSetup.put(`/PointPolicy/${editingPolicy.pointPolicyId}`, payload);
-                toast.success('Cập nhật point policy thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
+                toast.success('Cập nhật chính sách điểm thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
             } else {
                 await AxiosSetup.post('/PointPolicy', payload);
-                toast.success('Tạo point policy thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
+                toast.success('Tạo chính sách điểm thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
             }
 
             await fetchPolicies();
             closeModal();
         } catch (e) {
             console.error(e);
-            toast.error(editingPolicy ? 'Không thể cập nhật point policy.' : 'Không thể tạo point policy.', {
+            toast.error(editingPolicy ? 'Không thể cập nhật chính sách điểm.' : 'Không thể tạo chính sách điểm.', {
                 position: 'bottom-right',
                 autoClose: 3000,
                 theme: 'colored',
@@ -129,17 +129,17 @@ const AdminPointPolicy = () => {
     };
 
     const handleDelete = async (policyId) => {
-        const ok = window.confirm('Bạn có chắc muốn xoá point policy này không?');
+        const ok = window.confirm('Bạn có chắc muốn xoá chính sách điểm này không?');
         if (!ok) return;
 
         try {
             setDeletingId(policyId);
             await AxiosSetup.delete(`/PointPolicy/${policyId}`);
-            toast.success('Xoá point policy thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
+            toast.success('Xoá chính sách điểm thành công.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
             await fetchPolicies();
         } catch (e) {
             console.error(e);
-            toast.error('Không thể xoá point policy.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
+            toast.error('Không thể xoá chính sách điểm.', { position: 'bottom-right', autoClose: 3000, theme: 'colored' });
         } finally {
             setDeletingId(null);
         }
@@ -149,23 +149,23 @@ const AdminPointPolicy = () => {
         <div className="admin-point-policy">
             <div className="admin-point-policy__header">
                 <div>
-                    <p className="admin-point-policy__eyebrow">Admin workspace</p>
-                    <h2>Point Policy Management</h2>
-                    <p>Quản lý cấu hình quy đổi point theo từng giai đoạn hiệu lực.</p>
+                    <p className="admin-point-policy__eyebrow">Khu vực quản trị</p>
+                    <h2>Quản lý chính sách điểm</h2>
+                    <p>Quản lý cấu hình quy đổi điểm theo từng giai đoạn hiệu lực.</p>
                 </div>
 
                 <div className="admin-point-policy__actions">
                     <div className="admin-point-policy__search">
                         <FiSearch />
-                        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Tìm policy..." />
+                        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Tìm chính sách..." />
                     </div>
                     <button type="button" className="admin-point-policy__secondary-btn" onClick={fetchPolicies}>
                         <FiRefreshCw />
-                        Tải lại
+                        Làm mới
                     </button>
                     <button type="button" className="admin-point-policy__primary-btn" onClick={openCreate}>
                         <FiPlus />
-                        Tạo policy
+                        Tạo chính sách
                     </button>
                 </div>
             </div>
@@ -181,13 +181,13 @@ const AdminPointPolicy = () => {
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Point / Unit</th>
-                                    <th>Effective From</th>
-                                    <th>Effective To</th>
-                                    <th>Status</th>
-                                    <th>Created By</th>
-                                    <th>Created At</th>
-                                    <th className="admin-point-policy__actions-head">Actions</th>
+                                    <th>Điểm / đơn vị</th>
+                                    <th>Hiệu lực từ</th>
+                                    <th>Hiệu lực đến</th>
+                                    <th>Trạng thái</th>
+                                    <th>Người tạo</th>
+                                    <th>Ngày tạo</th>
+                                    <th className="admin-point-policy__actions-head">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -204,7 +204,7 @@ const AdminPointPolicy = () => {
                                             <td>{formatDateTime(policy.effectiveTo)}</td>
                                             <td>
                                                 <span className={`admin-point-policy__status ${policy.isActive ? 'admin-point-policy__status--active' : 'admin-point-policy__status--inactive'}`}>
-                                                    {policy.isActive ? 'Active' : 'Inactive'}
+                                                    {policy.isActive ? 'Đang hoạt động' : 'Ngừng hoạt động'}
                                                 </span>
                                             </td>
                                             <td>{policy.createdBySystemUserId || '-'}</td>
@@ -240,8 +240,8 @@ const AdminPointPolicy = () => {
                     <div className="admin-point-policy__modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
                         <div className="admin-point-policy__modal-head">
                             <div>
-                                <p>{editingPolicy ? 'Chỉnh sửa policy' : 'Tạo policy mới'}</p>
-                                <h3>{editingPolicy ? `#${editingPolicy.pointPolicyId}` : 'New policy'}</h3>
+                                <p>{editingPolicy ? 'Chỉnh sửa chính sách' : 'Tạo chính sách mới'}</p>
+                                <h3>{editingPolicy ? `#${editingPolicy.pointPolicyId}` : 'Chính sách mới'}</h3>
                             </div>
                             <button type="button" className="admin-point-policy__close" onClick={closeModal}>
                                 <FiX />
@@ -250,7 +250,7 @@ const AdminPointPolicy = () => {
 
                         <form className="admin-point-policy__form" onSubmit={handleSubmit}>
                             <label>
-                                <span>Point per unit</span>
+                                <span>Điểm / đơn vị</span>
                                 <input
                                     type="number"
                                     min="0"
@@ -261,7 +261,7 @@ const AdminPointPolicy = () => {
                                 />
                             </label>
                             <label>
-                                <span>Effective from</span>
+                                <span>Hiệu lực từ</span>
                                 <input
                                     type="datetime-local"
                                     value={form.effectiveFrom}
@@ -270,7 +270,7 @@ const AdminPointPolicy = () => {
                                 />
                             </label>
                             <label>
-                                <span>Effective to</span>
+                                <span>Hiệu lực đến</span>
                                 <input
                                     type="datetime-local"
                                     value={form.effectiveTo}
@@ -280,7 +280,7 @@ const AdminPointPolicy = () => {
                             </label>
                             <div className="admin-point-policy__modal-actions">
                                 <button type="button" className="admin-point-policy__secondary-btn" onClick={closeModal}>
-                                    Hủy
+Hủy
                                 </button>
                                 <button type="submit" className="admin-point-policy__primary-btn" disabled={saving}>
                                     <FiCheckCircle />
