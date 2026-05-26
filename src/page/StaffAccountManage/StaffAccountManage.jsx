@@ -79,6 +79,7 @@ const normalizeAccount = (item) => ({
     name: item.fullName || '-',
     email: item.email || '-',
     role: item.role || '-',
+    isActive: Boolean(item.isActive),
     status: item.isActive ? 'Đang hoạt động' : 'Đã khóa',
     lastLogin: item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : '-',
     phoneNumber: item.phoneNumber || '-',
@@ -383,7 +384,7 @@ const StaffAccountManage = () => {
                                                 </td>
                                                 <td>{accountItem.role}</td>
                                                 <td>
-                                                    <span className={`admin-account__status ${accountItem.status === 'Active' ? 'admin-account__status--active' : 'admin-account__status--locked'}`}>
+                                                    <span className={`admin-account__status ${accountItem.isActive ? 'admin-account__status--active' : 'admin-account__status--locked'}`}>
                                                         {accountItem.status}
                                                     </span>
                                                 </td>
@@ -398,7 +399,7 @@ const StaffAccountManage = () => {
                                                             <FiSend />
                                                             {accountItem.isBanNotificationSent ? 'Đã gửi' : 'Thông báo'}
                                                         </button>
-                                                        {accountItem.status === 'Active' ? (
+                                                        {accountItem.isActive ? (
                                                             <button type="button" className="admin-account__action-btn staff-account__action-btn staff-account__action-btn--danger" onClick={() => handleLock(accountItem)}>
                                                                 <FiLock />
                                                                 Khóa

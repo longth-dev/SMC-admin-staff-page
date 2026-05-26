@@ -13,7 +13,15 @@ const STATUS_FILTERS = [
     { value: 'pending', label: 'Đang chờ' },
     { value: 'approved', label: 'Đã duyệt' },
     { value: 'rejected', label: 'Đã từ chối' },
+    { value: 'cancelled', label: 'Đã hủy' },
 ];
+
+const STATUS_LABELS = {
+    pending: 'Đang chờ',
+    approved: 'Đã duyệt',
+    rejected: 'Đã từ chối',
+    cancelled: 'Đã hủy',
+};
 
 const formatDateTime = (value) => {
     if (!value) return '-';
@@ -35,6 +43,7 @@ const formatMoney = (value) => {
 };
 
 const getStatusClass = (status) => String(status || 'pending').toLowerCase();
+const getStatusLabel = (status) => STATUS_LABELS[String(status || 'pending').toLowerCase()] || status || '-';
 
 const StaffHandleWithdraw = () => {
     const [withdrawals, setWithdrawals] = useState([]);
@@ -100,6 +109,8 @@ const StaffHandleWithdraw = () => {
                 .some((value) => value.includes(keyword));
         });
     }, [search, statusFilter, withdrawals]);
+
+    const isFinalStatus = ['approved', 'rejected', 'cancelled'].includes(String(detail?.status || '').toLowerCase());
 
     const openDetail = async (withdrawRequestId) => {
         try {
@@ -295,7 +306,7 @@ const StaffHandleWithdraw = () => {
                                             <td>{formatDateTime(item.createdAt)}</td>
                                             <td>
                                                 <span className={`staff-withdraw-page__status staff-withdraw-page__status--${getStatusClass(item.status)}`}>
-                                                    {item.status || 'Đang chờ'}
+                                                    {getStatusLabel(item.status)}
                                                 </span>
                                             </td>
                                             <td>
@@ -345,7 +356,7 @@ const StaffHandleWithdraw = () => {
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
                                         <span>Trạng thái</span>
-                                        <strong>{detail.status || '-'}</strong>
+                                        <strong>{getStatusLabel(detail.status)}</strong>
                                     </div>
                                     <div className="staff-withdraw-page__detail-item">
                                         <span>Ngày tạo</span>
@@ -395,11 +406,11 @@ const StaffHandleWithdraw = () => {
                                 </div>
 
                                 <div className="staff-withdraw-page__modal-actions">
-                                    <button type="button" className="staff-withdraw-page__reject-btn" onClick={handleReject} disabled={actionLoading}>
+                                    <button type="button" className="staff-withdraw-page__reject-btn" onClick={handleReject} disabled={actionLoading || isFinalStatus}>
                                         <FiX />
 Từ chối
                                     </button>
-                                    <button type="button" className="staff-withdraw-page__approve-btn" onClick={handleApprove} disabled={actionLoading}>
+                                    <button type="button" className="staff-withdraw-page__approve-btn" onClick={handleApprove} disabled={actionLoading || isFinalStatus}>
                                         <FiCheckCircle />
 Duyệt
                                     </button>

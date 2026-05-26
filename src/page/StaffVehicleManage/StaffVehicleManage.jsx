@@ -14,7 +14,17 @@ import {
 import AxiosSetup from '../../services/AxiosSetup';
 import './StaffVehicleManage.css';
 
-const STATUS_OPTIONS = ['Tất cả', 'Approved', 'Pending', 'Rejected'];
+const STATUS_OPTIONS = ['Tất cả', 'Đã duyệt', 'Đang chờ', 'Đã từ chối'];
+const STATUS_API_VALUES = {
+  'Đã duyệt': 'Approved',
+  'Đang chờ': 'Pending',
+  'Đã từ chối': 'Rejected',
+};
+const STATUS_LABELS = {
+  approved: 'Đã duyệt',
+  pending: 'Đang chờ',
+  rejected: 'Đã từ chối',
+};
 const USE_STATUS_OPTIONS = ['Tất cả', 'Đang sử dụng', 'Không sử dụng'];
 
 const formatDate = (value) => {
@@ -25,6 +35,8 @@ const formatDate = (value) => {
 };
 
 const stripLocation = (value) => String(value || '-').split('|@lat:')[0].trim();
+const getStatusLabel = (value) => STATUS_LABELS[String(value || '').toLowerCase()] || value || '-';
+const getStatusApiValue = (label) => STATUS_API_VALUES[label] || label;
 
 const mapUseStatus = (value) => (value ? 'Đang sử dụng' : 'Không sử dụng');
 
@@ -70,7 +82,7 @@ const StaffVehicleManage = () => {
       setDetailError('');
       void fetchVehicles({
         keyword: search || undefined,
-        status: status === 'Tất cả' ? undefined : status,
+        status: status === 'Tất cả' ? undefined : getStatusApiValue(status),
         inUse: useStatus === 'Tất cả' ? undefined : useStatus === 'Đang sử dụng',
         page: currentPage,
         size: pageSize,
@@ -184,7 +196,7 @@ const StaffVehicleManage = () => {
                         <td>{[vehicle.brand, vehicle.model].filter(Boolean).join(' ') || '-'}</td>
                         <td>{vehicle.color || '-'}</td>
                         <td>{vehicle.ownerFullName || '-'}</td>
-                        <td>{vehicle.status || '-'}</td>
+                        <td>{getStatusLabel(vehicle.status)}</td>
                         <td>{mapUseStatus(vehicle.isInUse)}</td>
                         <td>{vehicle.totalTripCount ?? 0}</td>
                         <td>
@@ -256,7 +268,7 @@ const StaffVehicleManage = () => {
                       <span className="staff-vehicle-modal__plate-badge">{selectedVehicle.licensePlate || '-'}</span>
                     </div>
                     <span className={`staff-vehicle-modal__status-badge staff-vehicle-modal__status-badge--${String(selectedVehicle.status || '').toLowerCase()}`}>
-                      {selectedVehicle.status || '-'}
+                      {getStatusLabel(selectedVehicle.status)}
                     </span>
                   </div>
 

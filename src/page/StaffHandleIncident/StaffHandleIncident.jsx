@@ -8,9 +8,17 @@ import './StaffHandleIncident.css';
 const STATUS_FILTERS = [
     { value: 'all', label: 'Tất cả' },
     { value: 'pending', label: 'Đang chờ' },
+    { value: 'investigating', label: 'Đang điều tra' },
     { value: 'resolved', label: 'Đã xử lý' },
     { value: 'rejected', label: 'Đã từ chối' },
 ];
+
+const STATUS_LABELS = {
+    pending: 'Đang chờ',
+    investigating: 'Đang điều tra',
+    resolved: 'Đã xử lý',
+    rejected: 'Đã từ chối',
+};
 
 const formatDateTime = (value) => {
     if (!value) return '-';
@@ -25,6 +33,7 @@ const formatDateTime = (value) => {
 };
 
 const getStatusClass = (status) => String(status || 'pending').toLowerCase();
+const getStatusLabel = (status) => STATUS_LABELS[String(status || 'pending').toLowerCase()] || status || '-';
 
 const StaffHandleIncident = () => {
     const [incidents, setIncidents] = useState([]);
@@ -234,7 +243,7 @@ const StaffHandleIncident = () => {
                                             <td>{formatDateTime(item.createdAt)}</td>
                                             <td>
                                                 <span className={`staff-incident-page__status staff-incident-page__status--${getStatusClass(item.status)}`}>
-                                                    {item.status || 'Pending'}
+                                                    {getStatusLabel(item.status)}
                                                 </span>
                                             </td>
                                             <td>
@@ -280,7 +289,7 @@ const StaffHandleIncident = () => {
                                     </div>
                                     <div className="staff-incident-page__detail-item">
                                         <span>Trạng thái</span>
-                                        <strong>{incidentDetail.status || '-'}</strong>
+                                        <strong>{getStatusLabel(incidentDetail.status)}</strong>
                                     </div>
                                     <div className="staff-incident-page__detail-item">
                                         <span>Mã chuyến</span>

@@ -20,13 +20,22 @@ const formatDateTime = (value) => {
     }).format(date);
 };
 
+const STATUS_LABELS = {
+    pending: 'Đang chờ',
+    approved: 'Đã duyệt',
+    rejected: 'Đã từ chối',
+    suspended: 'Đã tạm khóa',
+};
+
 const getStatusClass = (status) => String(status || 'Pending').toLowerCase();
+const getStatusLabel = (status) => STATUS_LABELS[String(status || 'Pending').toLowerCase()] || status || '-';
 
 const STATUS_FILTERS = [
     { value: 'all', label: 'Tất cả' },
     { value: 'pending', label: 'Đang chờ' },
     { value: 'approved', label: 'Đã duyệt' },
     { value: 'rejected', label: 'Đã từ chối' },
+    { value: 'suspended', label: 'Đã tạm khóa' },
 ];
 
 const StaffDriverApprovalManage = () => {
@@ -337,7 +346,7 @@ const StaffDriverApprovalManage = () => {
                                             <td>{formatDateTime(driver.studentRequestedAt)}</td>
                                             <td>
                                                 <span className={`staff-driver-approval__status staff-driver-approval__status--${getStatusClass(driver.approvalStatus)}`}>
-                                                    {driver.approvalStatus || 'Đang chờ'}
+                                                    {getStatusLabel(driver.approvalStatus)}
                                                 </span>
                                             </td>
                                             <td>
@@ -403,7 +412,7 @@ const StaffDriverApprovalManage = () => {
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
                                         <span>Trạng thái</span>
-                                        <strong>{driverDetail.approvalStatus || '-'}</strong>
+                                        <strong>{getStatusLabel(driverDetail.approvalStatus)}</strong>
                                     </div>
                                     <div className="staff-driver-approval__detail-item">
                                         <span>Số giấy phép lái xe</span>
@@ -495,7 +504,7 @@ const StaffDriverApprovalManage = () => {
                                 
 
                                 <div className="staff-driver-approval__modal-actions">
-                                    <button type="button" className="staff-driver-approval__reject-btn" onClick={handleReject} disabled={actionLoading || String(driverDetail.approvalStatus || '').toLowerCase() === 'approved'}>
+                                    <button type="button" className="staff-driver-approval__reject-btn" onClick={handleReject} disabled={actionLoading || ['approved', 'rejected', 'suspended'].includes(String(driverDetail.approvalStatus || '').toLowerCase())}>
                                         <FiX />
                                         Từ chối
                                     </button>
@@ -503,10 +512,10 @@ const StaffDriverApprovalManage = () => {
                                         type="button"
                                         className="staff-driver-approval__approve-btn"
                                         onClick={handleApprove}
-                                        disabled={actionLoading || String(driverDetail.approvalStatus || '').toLowerCase() === 'approved'}
+                                        disabled={actionLoading || ['approved', 'rejected', 'suspended'].includes(String(driverDetail.approvalStatus || '').toLowerCase())}
                                     >
                                         <FiCheckCircle />
-                                        {String(driverDetail.approvalStatus || '').toLowerCase() === 'approved' ? 'Đã duyệt' : 'Duyệt'}
+                                        {['approved', 'rejected', 'suspended'].includes(String(driverDetail.approvalStatus || '').toLowerCase()) ? 'Đã duyệt' : 'Duyệt'}
                                     </button>
                                 </div>
                             </>
