@@ -50,14 +50,14 @@ const Login = () => {
             <div className="login-page__shape login-page__shape--three" />
 
             <div className="login-card">
-                <h1 className="login-card__title">Login to SMC-Admin-Web</h1>
+                <h1 className="login-card__title">Đăng nhập SMC-Admin-Web</h1>
                 <p className="login-card__subtitle">
-                    Please enter your email and password to continue
+                    Vui lòng nhập email và mật khẩu để tiếp tục
                 </p>
 
                 <form className="login-form" onSubmit={handleLogin}>
                     <label className="login-form__label" htmlFor="email">
-                        Email address:
+                        Địa chỉ email:
                     </label>
                     <input
                         id="email"
@@ -72,7 +72,7 @@ const Login = () => {
 
                     <div className="login-form__row">
                         <label className="login-form__label" htmlFor="password">
-                            Password
+                            Mật khẩu
                         </label>
                     </div>
 
@@ -99,21 +99,21 @@ const Login = () => {
 
                     <label className="login-form__checkbox">
                         <input type="checkbox" defaultChecked />
-                        <span>Remember Password</span>
+                        <span>Ghi nhớ mật khẩu</span>
                     </label>
 
                     {error ? <p className="login-form__error">{error}</p> : null}
 
                     <button type="submit" className="login-form__submit" disabled={loading}>
-                        {loading ? 'Signing In...' : 'Sign In'}
+                        {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                     </button>
 
                     <p className="login-form__footer">
-                        After login you can open the dashboard page.
+                        Sau khi đăng nhập, bạn có thể mở trang bảng điều khiển.
                     </p>
 
                     <p className="login-form__footer">
-                        Don&apos;t have an account? <a href="/register">Create Account</a>
+                        Chưa có tài khoản? <a href="/register">Tạo tài khoản</a>
                     </p>
                 </form>
             </div>
